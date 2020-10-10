@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace DTOs
+namespace API.DTOs
 {
     public class RegisterSingleUserDTO
     {
@@ -10,6 +10,9 @@ namespace DTOs
 
         [Required]
         public string Password { get; set; }
+
+        [Required]
+        public string Role { get; set; }
 
     }
 }

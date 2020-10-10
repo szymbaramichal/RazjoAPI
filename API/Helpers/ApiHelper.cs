@@ -1,11 +1,10 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Models;
+using API.Models;
 using MongoDB.Driver;
 
-namespace Helpers
+namespace API.Helpers
 {
     public class ApiHelper : IApiHelper
     {
@@ -58,6 +57,11 @@ namespace Helpers
 
             return user;
         }
+
+        #endregion
+
+        #region CalendarMethods
+        
         #endregion
 
         #region TestMethods

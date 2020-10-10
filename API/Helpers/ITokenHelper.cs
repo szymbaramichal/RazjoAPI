@@ -1,6 +1,6 @@
-using Models;
+using API.Models;
 
-namespace Helpers
+namespace API.Helpers
 {
     public interface ITokenHelper
     {

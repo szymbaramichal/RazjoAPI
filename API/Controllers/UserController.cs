@@ -1,11 +1,11 @@
 using System.Threading.Tasks;
 using AutoMapper;
-using DTOs;
-using Helpers;
+using API.DTOs;
+using API.Helpers;
 using Microsoft.AspNetCore.Mvc;
-using Models;
+using API.Models;
 
-namespace Controllers
+namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -21,22 +21,21 @@ namespace Controllers
             _apiHelper = apiHelper;
         }
 
-        [HttpPost("registerSingle")]
+        [HttpPost("register")]
         public async Task<IActionResult> RegisterSingleUser(RegisterSingleUserDTO registerUserDTO)
         {
             var mappedUser = _mapper.Map<User>(registerUserDTO);
 
             var isAdded = await _apiHelper.AddUser(mappedUser, registerUserDTO.Password);
 
-            if(isAdded)
-            return Ok(new { 
+            if(isAdded) return Ok(new { 
                 message = "Registered successfully."
             });
-            else 
-            return BadRequest(new {
+            else return BadRequest(new {
                 message = "User with passed in email already exists."
             });
         }
+
 
         [HttpPost("login")]
         public async Task<ActionResult<ReturnUserDTO>> Login(LoginUserDTO loginUser)
@@ -45,7 +44,7 @@ namespace Controllers
 
             if(user == null) 
             {
-                return Unauthorized(new {
+                return BadRequest(new {
                     message = "Invalid password or email."
                 });
             }

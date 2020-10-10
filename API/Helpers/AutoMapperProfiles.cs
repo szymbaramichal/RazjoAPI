@@ -1,8 +1,8 @@
 using AutoMapper;
-using DTOs;
-using Models;
+using API.DTOs;
+using API.Models;
 
-namespace Helpers
+namespace API.Helpers
 {
     public class AutoMapperProfiles : Profile
     {

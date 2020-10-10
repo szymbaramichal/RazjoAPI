@@ -5,9 +5,9 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Models;
+using API.Models;
 
-namespace Helpers
+namespace API.Helpers
 {
     public class TokenHelper : ITokenHelper
     {

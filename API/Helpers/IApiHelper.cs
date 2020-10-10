@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using Models;
+using API.Models;
 
-namespace Helpers
+namespace API.Helpers
 {
     public interface IApiHelper
     {

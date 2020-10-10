@@ -1,11 +1,12 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Models;
-using Helpers;
-using DTOs;
+using API.Models;
+using API.Helpers;
+using API.DTOs;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
-namespace Controllers
+namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -19,6 +20,7 @@ namespace Controllers
             _apiHelper = apiHelper;
         }
 
+        [Authorize]
         [HttpGet("get/{id}")]
         public async Task<ActionResult<Value>> GetValueById(string id)
         {
