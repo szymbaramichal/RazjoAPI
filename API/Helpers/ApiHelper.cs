@@ -35,6 +35,9 @@ namespace API.Helpers
             user.Email = user.Email.ToLower();
             user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
             user.PasswordSalt = hmac.Key;
+            user.FirstName = "";
+            user.Surname = "";
+            user.FamilyId = "";
 
             await _users.InsertOneAsync(user);
 

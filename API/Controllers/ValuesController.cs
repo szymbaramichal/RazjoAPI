@@ -20,6 +20,10 @@ namespace API.Controllers
             _apiHelper = apiHelper;
         }
 
+        ///<summary>
+        /// Test method to test authorization
+        ///</summary>
+        /// <param name="id">Id of value</param>
         [Authorize]
         [HttpGet("get/{id}")]
         public async Task<ActionResult<Value>> GetValueById(string id)
@@ -27,6 +31,10 @@ namespace API.Controllers
             return await _apiHelper.GetValueById(id);
         }
 
+        ///<summary>
+        /// Test method to add value 
+        ///</summary>
+        /// <param name="addValuesDTO">Input object</param>
         [HttpPost("add")]
         public async Task<ActionResult<Value>> AddValue(AddValuesDTO addValuesDTO)
         {

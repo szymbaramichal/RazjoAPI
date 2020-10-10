@@ -21,6 +21,10 @@ namespace API.Controllers
             _apiHelper = apiHelper;
         }
 
+        ///<summary>
+        /// Register user on platform, PSY-psychlogist, USR-user, PAR-parent
+        ///</summary>
+        /// <param name="registerUserDTO">Email, Password and Role</param>
         [HttpPost("register")]
         public async Task<IActionResult> RegisterSingleUser(RegisterSingleUserDTO registerUserDTO)
         {
@@ -36,11 +40,14 @@ namespace API.Controllers
             });
         }
 
-
+        ///<summary>
+        /// Login user in application
+        ///</summary>
+        /// <param name="loginUserDTO">Input object</param>
         [HttpPost("login")]
-        public async Task<ActionResult<ReturnUserDTO>> Login(LoginUserDTO loginUser)
+        public async Task<ActionResult<ReturnUserDTO>> Login(LoginUserDTO loginUserDTO)
         {
-            var user = await _apiHelper.Login(loginUser.Email, loginUser.Password);
+            var user = await _apiHelper.Login(loginUserDTO.Email, loginUserDTO.Password);
 
             if(user == null) 
             {
