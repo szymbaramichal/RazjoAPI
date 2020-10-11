@@ -4,6 +4,7 @@ using API.DTOs;
 using API.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using API.Models;
+using System.Collections.Generic;
 
 namespace API.Controllers
 {
@@ -55,9 +56,12 @@ namespace API.Controllers
                     errors = "Invalid password or email."
                 });
             }
+            
+            var notes = await _apiHelper.ReturnLastMonthNotes(user.Id);
 
             return new ReturnUserDTO {
-                Token = _tokenHelper.CreateToken(user)
+                Token = _tokenHelper.CreateToken(user),
+                CalendarNotes = notes
             };
         } 
     }

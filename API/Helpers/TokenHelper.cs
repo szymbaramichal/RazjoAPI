@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using API.Models;
+using System.Linq;
 
 namespace API.Helpers
 {
@@ -37,6 +38,15 @@ namespace API.Helpers
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
+        }
+
+        public string GetIdByToken(string token)
+        {
+            token = token.Replace("Bearer ", string.Empty);
+            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
+            var id = jsonToken.Claims.FirstOrDefault(claim => claim.Type == "nameid").Value;
+            return id;
         }
     }
 }

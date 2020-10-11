@@ -10,6 +10,8 @@ namespace API.Helpers
         {
             CreateMap<AddValuesDTO, Value>();
             CreateMap<RegisterSingleUserDTO, User>();
+            CreateMap<AddCalendarNoteDTO, CalendarNote>();
+            CreateMap<CalendarNote, ReturnCalendarNoteDTO>();
         }
     }
 }
