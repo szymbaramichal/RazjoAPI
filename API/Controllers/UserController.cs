@@ -36,7 +36,7 @@ namespace API.Controllers
                 message = "Registered successfully."
             });
             else return BadRequest(new {
-                message = "User with passed in email already exists."
+                errors = "User with passed in email already exists."
             });
         }
 
@@ -52,7 +52,7 @@ namespace API.Controllers
             if(user == null) 
             {
                 return BadRequest(new {
-                    message = "Invalid password or email."
+                    errors = "Invalid password or email."
                 });
             }
 
