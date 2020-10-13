@@ -59,7 +59,7 @@ namespace API.Controllers
             var family = await _apiHelper.JoinToFamily(joinToFamilyDTO.InvitationCode, id);
 
             if(family == null) return BadRequest(new {
-                errors = "Bad invitation code."
+                errors = "Bad invitation code or you are already in family."
             });
 
             var familyToReturn = await _apiHelper.ReturnFamilyInfo(family.Id);

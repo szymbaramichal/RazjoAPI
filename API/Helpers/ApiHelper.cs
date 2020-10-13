@@ -173,9 +173,15 @@ namespace API.Helpers
 
             if(family == null) return null;
 
+            var user = await _users.Find<User>(x => x.Id == id).FirstOrDefaultAsync();
+
+            if(user.Role == "USR")
+            {
+                if(user.FamilyId.Count > 0) return null;
+            }
+
             family.USRId = id;
 
-            var user = await _users.Find<User>(x => x.Id == id).FirstOrDefaultAsync();
             user.FamilyId.Add(family.Id);
 
             await _users.FindOneAndReplaceAsync<User>(x => x.Id == id, user);
