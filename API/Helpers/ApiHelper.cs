@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using API.DTOs;
 using API.Models;
-using AutoMapper;
 using MongoDB.Driver;
 
 namespace API.Helpers
@@ -16,21 +14,20 @@ namespace API.Helpers
         private IMongoCollection<User> _users;
         private IMongoCollection<Value> _values;
         private IMongoCollection<CalendarNote> _calendarNotes;
+        private IMongoCollection<Family> _familes;
         private IMongoDatabase database;
-        private IMapper _mapper;
 
         #endregion
 
         #region Constructor
-        public ApiHelper(IMapper mapper)
+        public ApiHelper()
         {
-            _mapper = mapper;
-
             var client = new MongoClient("mongodb+srv://test:test@main.qhp4n.mongodb.net/<dbname>?retryWrites=true&w=majority");
             database = client.GetDatabase("Main");
             _users = database.GetCollection<User>("Users");
             _values = database.GetCollection<Value>("Values");
             _calendarNotes = database.GetCollection<CalendarNote>("CalendarNotes");
+            _familes = database.GetCollection<Family>("Families");
         }
         #endregion
 
@@ -70,6 +67,12 @@ namespace API.Helpers
             return user;
         }
 
+        public async Task<string> ReturnUserRole(string id)
+        {
+            var user = await _users.Find<User>(x => x.Id == id).FirstOrDefaultAsync();
+
+            return user.Role;
+        }
         #endregion
 
         #region TestMethods
@@ -87,7 +90,7 @@ namespace API.Helpers
         #endregion
     
         #region CalendarMethods
-        public async Task<ReturnCalendarNoteDTO> AddCalendarNote(CalendarNote calendarNote, string userId)
+        public async Task<CalendarNote> AddCalendarNote(CalendarNote calendarNote, string userId)
         {
             calendarNote.Day = DateTime.Today.Day;
             calendarNote.Month = DateTime.Today.Month;
@@ -95,26 +98,36 @@ namespace API.Helpers
             calendarNote.UserId = userId;
 
             await _calendarNotes.InsertOneAsync(calendarNote);
-
-            var mappedNote = _mapper.Map<ReturnCalendarNoteDTO>(calendarNote);
-
             
-            return mappedNote;
-
+            return calendarNote;
         }
-        public async Task<List<ReturnCalendarNoteDTO>> ReturnLastMonthNotes(string userId)
+        public async Task<List<CalendarNote>> ReturnActualMonthNotes(string userId)
         {
             var notes = await _calendarNotes.Find<CalendarNote>(x => x.UserId == userId && x.Month == DateTime.Today.Month).ToListAsync();
-            List<ReturnCalendarNoteDTO> mappedNotes = new List<ReturnCalendarNoteDTO>();
 
-            foreach (var note in notes)
-            {
-                mappedNotes.Add(_mapper.Map<ReturnCalendarNoteDTO>(note));
-            }
-
-            return mappedNotes;
+            return notes;
         }
 
+        #endregion
+    
+        #region FamilyMethods
+        public async Task<Family> CreateFamily(string id, string familyName)
+        {
+            Family familyToAdd = new Family{
+                FamilyName = familyName,
+                PSYId = id
+            };
+
+            await _familes.InsertOneAsync(familyToAdd);
+
+            var user = await _users.Find<User>(x => x.Id == id).FirstOrDefaultAsync();
+            user.IsFamilyMember = true;
+            user.FamilyId = familyToAdd.Id;
+
+            await _users.FindOneAndReplaceAsync<User>(x => x.Id == id, user);
+            
+            return familyToAdd;
+        }
         #endregion
     }
 }

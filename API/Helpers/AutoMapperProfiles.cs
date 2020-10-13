@@ -9,9 +9,10 @@ namespace API.Helpers
         public AutoMapperProfiles()
         {
             CreateMap<AddValuesDTO, Value>();
-            CreateMap<RegisterSingleUserDTO, User>();
+            CreateMap<RegisterUserDTO, User>();
             CreateMap<AddCalendarNoteDTO, CalendarNote>();
             CreateMap<CalendarNote, ReturnCalendarNoteDTO>();
+            CreateMap<Family, ReturnFamilyDTO>();
         }
     }
 }

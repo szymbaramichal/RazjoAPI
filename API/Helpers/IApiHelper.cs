@@ -15,11 +15,16 @@ namespace API.Helpers
         #region UserMethods
         Task<bool> AddUser(User user, string password);
         Task<User> Login(string email, string password);
+        Task<string> ReturnUserRole(string id);
         #endregion
 
         #region CalendarMethods
-        Task<ReturnCalendarNoteDTO> AddCalendarNote(CalendarNote calendarNote, string userId);
-        Task<List<ReturnCalendarNoteDTO>> ReturnLastMonthNotes(string userId);
+        Task<CalendarNote> AddCalendarNote(CalendarNote calendarNote, string userId);
+        Task<List<CalendarNote>> ReturnActualMonthNotes(string userId);
+        #endregion
+
+        #region FamilyMethods
+        Task<Family> CreateFamily(string id, string familyName);
         #endregion
 
     }

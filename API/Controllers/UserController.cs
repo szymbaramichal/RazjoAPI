@@ -27,7 +27,7 @@ namespace API.Controllers
         ///</summary>
         /// <param name="registerUserDTO">Email, Password and Role</param>
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterSingleUser(RegisterSingleUserDTO registerUserDTO)
+        public async Task<IActionResult> RegisterSingleUser(RegisterUserDTO registerUserDTO)
         {
             var mappedUser = _mapper.Map<User>(registerUserDTO);
 
@@ -57,12 +57,19 @@ namespace API.Controllers
                 });
             }
             
-            var notes = await _apiHelper.ReturnLastMonthNotes(user.Id);
+            var notes = await _apiHelper.ReturnActualMonthNotes(user.Id);
+
+            List<ReturnCalendarNoteDTO> mappedNotes = new List<ReturnCalendarNoteDTO>();
+
+            foreach (var note in notes)
+            {
+                mappedNotes.Add(_mapper.Map<ReturnCalendarNoteDTO>(note));
+            }
 
             return new ReturnUserDTO {
                 Token = _tokenHelper.CreateToken(user),
-                CalendarNotes = notes
+                CalendarNotes = mappedNotes
             };
-        } 
+        }
     }
 }

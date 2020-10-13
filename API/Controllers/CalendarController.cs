@@ -37,7 +37,7 @@ namespace API.Controllers
             
             var calendarNote = await _apiHelper.AddCalendarNote(mappedNote, id);
 
-            return calendarNote;
+            return _mapper.Map<ReturnCalendarNoteDTO>(calendarNote);
         }
 
         ///<summary>
@@ -48,9 +48,16 @@ namespace API.Controllers
         {
             var id = _tokenHelper.GetIdByToken(HttpContext.Request.Headers["Authorization"]);
 
-            var notes = await _apiHelper.ReturnLastMonthNotes(id);
+            var notes = await _apiHelper.ReturnActualMonthNotes(id);
 
-            return notes;
+            List<ReturnCalendarNoteDTO> mappedNotes = new List<ReturnCalendarNoteDTO>();
+
+            foreach (var note in notes)
+            {
+                mappedNotes.Add(_mapper.Map<ReturnCalendarNoteDTO>(notes));
+            }
+
+            return mappedNotes;
         }
     }
 }
