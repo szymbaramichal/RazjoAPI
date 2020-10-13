@@ -87,6 +87,18 @@ namespace API.Helpers
             string[] names = {user.FirstName, user.Surname};
             return names;
         }
+        
+        public async Task<User> UpdateUserInfo(string id, string firstName, string surname)
+        {
+            var user = await _users.Find<User>(x => x.Id == id).FirstOrDefaultAsync();
+        
+            user.FirstName = firstName;
+            user.Surname = surname;
+
+            await _users.FindOneAndReplaceAsync<User>(x => x.Id == id, user);
+
+            return user;
+        }
         #endregion
 
         #region TestMethods
@@ -118,6 +130,15 @@ namespace API.Helpers
         public async Task<List<CalendarNote>> ReturnActualMonthNotes(string userId)
         {
             var notes = await _calendarNotes.Find<CalendarNote>(x => x.UserId == userId && x.Month == DateTime.Today.Month).ToListAsync();
+
+            return notes;
+        }
+
+        public async Task<List<CalendarNote>> ReturnNotesForMonth(string userId, int month)
+        {
+            var family = await _familes.Find<Family>(x => x.USRId == userId).FirstOrDefaultAsync();
+
+            var notes = await _calendarNotes.Find<CalendarNote>(x => x.UserId == userId && x.Month == month).ToListAsync();
 
             return notes;
         }
@@ -177,19 +198,18 @@ namespace API.Helpers
                 familyInfo.UserNames = usr.FirstName + " " + usr.Surname;
                 var notes = await ReturnActualMonthNotes(family.USRId);
 
-                familyInfo.CalendarNotes = new List<ReturnCalendarNoteDTO>();
-                
-                foreach (var note in notes)
-                {
-                    familyInfo.CalendarNotes.Add(_mapper.Map<ReturnCalendarNoteDTO>(note));
-                }
+                familyInfo.UsrId = usr.Id;
             }
 
             var psy = await _users.Find<User>(x => x.Id == family.PSYId).FirstOrDefaultAsync();
+            
+            familyInfo.PsyId = psy.Id;
             familyInfo.PsychologistNames = psy.FirstName + " " + psy.Surname;
             
             familyInfo.FamilyId = family.Id;
             familyInfo.FamilyName = family.FamilyName;
+            
+            familyInfo.InvitationCode = family.InvitationCode;
 
             return familyInfo;
         }

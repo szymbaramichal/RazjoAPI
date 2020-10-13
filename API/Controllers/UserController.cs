@@ -5,6 +5,7 @@ using API.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using API.Models;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
@@ -23,7 +24,7 @@ namespace API.Controllers
         }
 
         ///<summary>
-        /// Register user on platform, PSY-psychlogist, USR-user, PAR-parent
+        /// Register user on platform,      PSY-psychlogist, USR-user
         ///</summary>
         /// <param name="registerUserDTO">Email, Password and Role</param>
         [HttpPost("register")]
@@ -63,7 +64,6 @@ namespace API.Controllers
 
             if(user.Role == "USR")
             {
-                userToReturn.Token = _tokenHelper.CreateToken(user);
 
                 List<ReturnCalendarNoteDTO> mappedNotes = new List<ReturnCalendarNoteDTO>();
 
@@ -71,21 +71,35 @@ namespace API.Controllers
                 {
                     mappedNotes.Add(_mapper.Map<ReturnCalendarNoteDTO>(note));
                 }
+
                 userToReturn.CalendarNotes = mappedNotes;
             }
-            else 
+            
+            userToReturn.Token = _tokenHelper.CreateToken(user);
+
+            userToReturn.Families = new List<ReturnFamilyDTO>();
+
+            for (int i = 0; i < user.FamilyId.Count; i++)
             {
-                userToReturn.Token = _tokenHelper.CreateToken(user);
-                userToReturn.Families = new List<ReturnFamilyDTO>();
-                for (int i = 0; i < user.FamilyId.Count; i++)
-                {
-                    userToReturn.Families.Add(await _apiHelper.ReturnFamilyInfo(user.FamilyId[i]));
-                }
+                userToReturn.Families.Add(await _apiHelper.ReturnFamilyInfo(user.FamilyId[i]));
             }
 
             userToReturn.UserInfo = _mapper.Map<UserInfoDTO>(user);
 
             return userToReturn;
+        }
+
+        [HttpPut("update")]
+        [Authorize]
+        public async Task<ActionResult<UserInfoDTO>> UpdateUserInfo(UpdateUserInfoDTO updateUserInfoDTO)
+        {
+            var id = _tokenHelper.GetIdByToken(HttpContext.Request.Headers["Authorization"]);
+
+            var user = await _apiHelper.UpdateUserInfo(id, updateUserInfoDTO.FirstName, updateUserInfoDTO.Surname);
+
+            var mappedUser = _mapper.Map<UserInfoDTO>(user);
+            
+            return mappedUser;
         }
     }
 }

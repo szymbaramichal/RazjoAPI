@@ -17,11 +17,13 @@ namespace API.Helpers
         Task<User> Login(string email, string password);
         Task<string> ReturnUserRole(string id);
         Task<string[]> ReturnUserName(string id);
+        Task<User> UpdateUserInfo(string id, string firstName, string surname);
         #endregion
 
         #region CalendarMethods
         Task<CalendarNote> AddCalendarNote(CalendarNote calendarNote, string userId);
         Task<List<CalendarNote>> ReturnActualMonthNotes(string userId);
+        Task<List<CalendarNote>> ReturnNotesForMonth(string userId, int month);
         #endregion
 
         #region FamilyMethods

@@ -63,5 +63,25 @@ namespace API.Controllers
 
             return mappedNotes;
         }
+
+        ///<summary>
+        ///Get notes for passed in month.
+        ///</summary>
+        [HttpGet("getNotesForMonth")]
+        public async Task<ActionResult<List<ReturnCalendarNoteDTO>>> GetNotesForPassedMonth(GetNotesForMonthDTO getNotesForMonthDTO)
+        {
+            var id = _tokenHelper.GetIdByToken(HttpContext.Request.Headers["Authorization"]);
+
+            var notes = await _apiHelper.ReturnNotesForMonth(id, getNotesForMonthDTO.Month);
+
+            List<ReturnCalendarNoteDTO> mappedNotes = new List<ReturnCalendarNoteDTO>();
+
+            foreach (var note in notes)
+            {
+                mappedNotes.Add(_mapper.Map<ReturnCalendarNoteDTO>(note));
+            }
+
+            return mappedNotes;
+        }
     }
 }

@@ -23,6 +23,10 @@ namespace API.Controllers
             _tokenHelper = tokenHelper;
         }
 
+        ///<summary>
+        /// Create family
+        ///</summary>
+        /// <param name="createFamilyDTO">Input object</param>
         [HttpPost("create")]
         public async Task<ActionResult<ReturnFamilyDTO>> CreateFamily(CreateFamilyDTO createFamilyDTO)
         {
@@ -39,6 +43,10 @@ namespace API.Controllers
             return familyToReturn;
         }
 
+        ///<summary>
+        ///Join to existing family
+        ///</summary>
+        /// <param name="joinToFamilyDTO">Input object</param>
         [HttpPost("join")]
         public async Task<ActionResult<ReturnFamilyDTO>> JoinToFamily(JoinToFamilyDTO joinToFamilyDTO)
         {
