@@ -74,7 +74,7 @@ namespace API.Controllers
 
                 userToReturn.CalendarNotes = mappedNotes;
             }
-            
+
             userToReturn.Token = _tokenHelper.CreateToken(user);
 
             userToReturn.Families = new List<ReturnFamilyDTO>();
@@ -89,6 +89,10 @@ namespace API.Controllers
             return userToReturn;
         }
 
+        ///<summary>
+        /// Update user Firstname and Surname.
+        ///</summary>
+        /// <param name="updateUserInfoDTO">Input object</param>
         [HttpPut("update")]
         [Authorize]
         public async Task<ActionResult<UserInfoDTO>> UpdateUserInfo(UpdateUserInfoDTO updateUserInfoDTO)
