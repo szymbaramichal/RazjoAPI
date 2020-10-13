@@ -16,6 +16,7 @@ namespace API.Helpers
         Task<bool> AddUser(User user, string password);
         Task<User> Login(string email, string password);
         Task<string> ReturnUserRole(string id);
+        Task<string[]> ReturnUserName(string id);
         #endregion
 
         #region CalendarMethods
@@ -25,6 +26,8 @@ namespace API.Helpers
 
         #region FamilyMethods
         Task<Family> CreateFamily(string id, string familyName);
+        Task<Family> JoinToFamily(string invitationCode, string id);
+        Task<ReturnFamilyDTO> ReturnFamilyInfo(string familyId);
         #endregion
 
     }

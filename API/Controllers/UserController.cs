@@ -59,17 +59,33 @@ namespace API.Controllers
             
             var notes = await _apiHelper.ReturnActualMonthNotes(user.Id);
 
-            List<ReturnCalendarNoteDTO> mappedNotes = new List<ReturnCalendarNoteDTO>();
+            var userToReturn = new ReturnUserDTO();
 
-            foreach (var note in notes)
+            if(user.Role == "USR")
             {
-                mappedNotes.Add(_mapper.Map<ReturnCalendarNoteDTO>(note));
+                userToReturn.Token = _tokenHelper.CreateToken(user);
+
+                List<ReturnCalendarNoteDTO> mappedNotes = new List<ReturnCalendarNoteDTO>();
+
+                foreach (var note in notes)
+                {
+                    mappedNotes.Add(_mapper.Map<ReturnCalendarNoteDTO>(note));
+                }
+                userToReturn.CalendarNotes = mappedNotes;
+            }
+            else 
+            {
+                userToReturn.Token = _tokenHelper.CreateToken(user);
+                userToReturn.Families = new List<ReturnFamilyDTO>();
+                for (int i = 0; i < user.FamilyId.Count; i++)
+                {
+                    userToReturn.Families.Add(await _apiHelper.ReturnFamilyInfo(user.FamilyId[i]));
+                }
             }
 
-            return new ReturnUserDTO {
-                Token = _tokenHelper.CreateToken(user),
-                CalendarNotes = mappedNotes
-            };
+            userToReturn.UserInfo = _mapper.Map<UserInfoDTO>(user);
+
+            return userToReturn;
         }
     }
 }

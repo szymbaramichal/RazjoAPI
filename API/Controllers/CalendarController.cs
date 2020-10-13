@@ -32,6 +32,10 @@ namespace API.Controllers
         public async Task<ActionResult<ReturnCalendarNoteDTO>> AddCalendarNote(AddCalendarNoteDTO addCalendarNoteDTO) 
         {
             var id = _tokenHelper.GetIdByToken(HttpContext.Request.Headers["Authorization"]);
+
+            if(await _apiHelper.ReturnUserRole(id) != "USR") return BadRequest(new {
+                errors = "As psychologist you can't add normal note to calendar."
+            });
             
             var mappedNote = _mapper.Map<CalendarNote>(addCalendarNoteDTO);
             
@@ -54,7 +58,7 @@ namespace API.Controllers
 
             foreach (var note in notes)
             {
-                mappedNotes.Add(_mapper.Map<ReturnCalendarNoteDTO>(notes));
+                mappedNotes.Add(_mapper.Map<ReturnCalendarNoteDTO>(note));
             }
 
             return mappedNotes;

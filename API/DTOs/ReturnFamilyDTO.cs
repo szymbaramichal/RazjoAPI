@@ -1,10 +1,13 @@
+using System.Collections.Generic;
+
 namespace API.DTOs
 {
     public class ReturnFamilyDTO
     {
+        public string FamilyId { get; set; }
         public string FamilyName { get; set; }
-        public string USRId { get; set; }
-        public string PSYId { get; set; }
-        public string PARId { get; set; }
+        public string UserNames { get; set; }
+        public string PsychologistNames { get; set; }
+        public List<ReturnCalendarNoteDTO> CalendarNotes { get; set; }
     }
 }

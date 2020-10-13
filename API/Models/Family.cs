@@ -11,6 +11,6 @@ namespace API.Models
         public string FamilyName { get; set; }
         public string USRId { get; set; }
         public string PSYId { get; set; }
-        public string PARId { get; set; }
+        public string InvitationCode { get; set; }
     }
 }

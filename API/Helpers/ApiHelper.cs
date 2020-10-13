@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using API.DTOs;
 using API.Models;
+using AutoMapper;
 using MongoDB.Driver;
 
 namespace API.Helpers
@@ -11,6 +14,7 @@ namespace API.Helpers
     public class ApiHelper : IApiHelper
     {
         #region Variables
+        private IMapper _mapper;
         private IMongoCollection<User> _users;
         private IMongoCollection<Value> _values;
         private IMongoCollection<CalendarNote> _calendarNotes;
@@ -20,10 +24,12 @@ namespace API.Helpers
         #endregion
 
         #region Constructor
-        public ApiHelper()
+        public ApiHelper(IMapper mapper)
         {
+            _mapper = mapper;
+
             var client = new MongoClient("mongodb+srv://test:test@main.qhp4n.mongodb.net/<dbname>?retryWrites=true&w=majority");
-            database = client.GetDatabase("Main");
+            database = client.GetDatabase("Razjo");
             _users = database.GetCollection<User>("Users");
             _values = database.GetCollection<Value>("Values");
             _calendarNotes = database.GetCollection<CalendarNote>("CalendarNotes");
@@ -43,7 +49,7 @@ namespace API.Helpers
             user.PasswordSalt = hmac.Key;
             user.FirstName = "";
             user.Surname = "";
-            user.FamilyId = "";
+            user.FamilyId = new List<string>();
 
             await _users.InsertOneAsync(user);
 
@@ -72,6 +78,14 @@ namespace API.Helpers
             var user = await _users.Find<User>(x => x.Id == id).FirstOrDefaultAsync();
 
             return user.Role;
+        }
+        
+        public async Task<string[]> ReturnUserName(string id)
+        {
+            var user = await _users.Find<User>(x => x.Id == id).FirstOrDefaultAsync();
+
+            string[] names = {user.FirstName, user.Surname};
+            return names;
         }
         #endregion
 
@@ -113,20 +127,71 @@ namespace API.Helpers
         #region FamilyMethods
         public async Task<Family> CreateFamily(string id, string familyName)
         {
+            Random random = new Random();
+            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            var invitationCode = new string(Enumerable.Repeat(chars, 8).Select(s => s[random.Next(s.Length)]).ToArray());
             Family familyToAdd = new Family{
                 FamilyName = familyName,
-                PSYId = id
+                PSYId = id,
+                InvitationCode = invitationCode
             };
 
             await _familes.InsertOneAsync(familyToAdd);
 
             var user = await _users.Find<User>(x => x.Id == id).FirstOrDefaultAsync();
-            user.IsFamilyMember = true;
-            user.FamilyId = familyToAdd.Id;
+            user.FamilyId.Add(familyToAdd.Id);
 
             await _users.FindOneAndReplaceAsync<User>(x => x.Id == id, user);
             
             return familyToAdd;
+        }
+
+        public async Task<Family> JoinToFamily(string invitationCode, string id)
+        {
+            var family = await _familes.Find<Family>(x => x.InvitationCode == invitationCode).FirstOrDefaultAsync();
+
+            if(family == null) return null;
+
+            family.USRId = id;
+
+            var user = await _users.Find<User>(x => x.Id == id).FirstOrDefaultAsync();
+            user.FamilyId.Add(family.Id);
+
+            await _users.FindOneAndReplaceAsync<User>(x => x.Id == id, user);
+            await _familes.FindOneAndReplaceAsync<Family>(x => x.Id == family.Id, family);
+
+            return family;
+        }
+
+        public async Task<ReturnFamilyDTO> ReturnFamilyInfo(string familyId)
+        {
+            var familyInfo = new ReturnFamilyDTO();
+
+            var family = await _familes.Find<Family>(x => x.Id == familyId).FirstOrDefaultAsync();
+
+            if(family == null) return null;
+
+            if(family.USRId != null)
+            {
+                var usr = await _users.Find<User>(x => x.Id == family.USRId).FirstOrDefaultAsync();
+                familyInfo.UserNames = usr.FirstName + " " + usr.Surname;
+                var notes = await ReturnActualMonthNotes(family.USRId);
+
+                familyInfo.CalendarNotes = new List<ReturnCalendarNoteDTO>();
+                
+                foreach (var note in notes)
+                {
+                    familyInfo.CalendarNotes.Add(_mapper.Map<ReturnCalendarNoteDTO>(note));
+                }
+            }
+
+            var psy = await _users.Find<User>(x => x.Id == family.PSYId).FirstOrDefaultAsync();
+            familyInfo.PsychologistNames = psy.FirstName + " " + psy.Surname;
+            
+            familyInfo.FamilyId = family.Id;
+            familyInfo.FamilyName = family.FamilyName;
+
+            return familyInfo;
         }
         #endregion
     }

@@ -34,9 +34,29 @@ namespace API.Controllers
 
             var family = await _apiHelper.CreateFamily(id, createFamilyDTO.FamilyName);
 
-            var mappedFamily = _mapper.Map<ReturnFamilyDTO>(family);
+            var familyToReturn = await _apiHelper.ReturnFamilyInfo(family.Id);
 
-            return mappedFamily;
+            return familyToReturn;
+        }
+
+        [HttpPost("join")]
+        public async Task<ActionResult<ReturnFamilyDTO>> JoinToFamily(JoinToFamilyDTO joinToFamilyDTO)
+        {
+            var id = _tokenHelper.GetIdByToken(HttpContext.Request.Headers["Authorization"]);
+            
+            if(await _apiHelper.ReturnUserRole(id) != "USR") return BadRequest(new {
+                errors = "Only as normal user you can join to family."
+            });
+
+            var family = await _apiHelper.JoinToFamily(joinToFamilyDTO.InvitationCode, id);
+
+            if(family == null) return BadRequest(new {
+                errors = "Bad invitation code."
+            });
+
+            var familyToReturn = await _apiHelper.ReturnFamilyInfo(family.Id);
+
+            return familyToReturn;
         }
     }
 }

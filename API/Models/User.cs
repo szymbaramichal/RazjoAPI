@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -13,8 +14,7 @@ namespace API.Models
         public byte[] PasswordSalt { get; set; }
         public string FirstName { get; set; }
         public string Surname { get; set; }
-        public bool IsFamilyMember { get; set; }
-        public string FamilyId { get; set; }
+        public List<string> FamilyId { get; set; }
 
         //PSY-psychlogist, USR-normal user, PAR- parent
         public string Role { get; set; }

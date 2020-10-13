@@ -13,6 +13,7 @@ namespace API.Helpers
             CreateMap<AddCalendarNoteDTO, CalendarNote>();
             CreateMap<CalendarNote, ReturnCalendarNoteDTO>();
             CreateMap<Family, ReturnFamilyDTO>();
+            CreateMap<User, UserInfoDTO>();
         }
     }
 }
