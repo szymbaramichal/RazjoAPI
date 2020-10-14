@@ -1,8 +1,7 @@
 namespace API.DTOs
 {
-    public class GetNotesForMonthDTO
+    public class GetNotesForActualMonthDTO
     {
         public string FamilyId { get; set; }
-        public int Month { get; set; }
     }
 }

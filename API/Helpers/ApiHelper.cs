@@ -121,26 +121,36 @@ namespace API.Helpers
             calendarNote.Day = DateTime.Today.Day;
             calendarNote.Month = DateTime.Today.Month;
             calendarNote.Year = DateTime.Today.Year;
+
             calendarNote.UserId = userId;
+            calendarNote.UserRole = await ReturnUserRole(userId);
 
             await _calendarNotes.InsertOneAsync(calendarNote);
             
             return calendarNote;
         }
-        public async Task<List<CalendarNote>> ReturnActualMonthNotes(string userId)
+        public async Task<List<CalendarNote>> ReturnActualMonthNotes(string familyId, string userId)
         {
-            var notes = await _calendarNotes.Find<CalendarNote>(x => x.UserId == userId && x.Month == DateTime.Today.Month).ToListAsync();
+            var family = await _familes.Find<Family>(x => x.Id == familyId).FirstOrDefaultAsync();
 
-            return notes;
+            if(family.PSYId == userId || family.USRId == userId)
+            {
+                var notes = await _calendarNotes.Find<CalendarNote>(x => x.FamilyId == familyId && x.Month == DateTime.Today.Month).ToListAsync();
+                return notes;
+            }
+            else return null;
+
         }
-
-        public async Task<List<CalendarNote>> ReturnNotesForMonth(string userId, int month)
+        public async Task<List<CalendarNote>> ReturnNotesForMonth(string familyId, string userId, int month)
         {
-            var family = await _familes.Find<Family>(x => x.USRId == userId).FirstOrDefaultAsync();
+            var family = await _familes.Find<Family>(x => x.Id == familyId).FirstOrDefaultAsync();
 
-            var notes = await _calendarNotes.Find<CalendarNote>(x => x.UserId == userId && x.Month == month).ToListAsync();
-
-            return notes;
+            if(family.PSYId == userId || family.USRId == userId)
+            {
+                var notes = await _calendarNotes.Find<CalendarNote>(x => x.FamilyId == familyId && x.Month == month).ToListAsync();
+                return notes;
+            }
+            else return null;
         }
 
         #endregion
@@ -190,22 +200,26 @@ namespace API.Helpers
             return family;
         }
 
-        public async Task<ReturnFamilyDTO> ReturnFamilyInfo(string familyId)
+        public async Task<ReturnFamilyDTO> ReturnFamilyInfo(string familyId, string userId)
         {
             var familyInfo = new ReturnFamilyDTO();
+            familyInfo.CalendarNotes = new List<ReturnCalendarNoteDTO>();
 
             var family = await _familes.Find<Family>(x => x.Id == familyId).FirstOrDefaultAsync();
 
             if(family == null) return null;
 
+            if(family.PSYId != userId && family.USRId != userId) return null;
+
             if(family.USRId != null)
             {
                 var usr = await _users.Find<User>(x => x.Id == family.USRId).FirstOrDefaultAsync();
                 familyInfo.UserNames = usr.FirstName + " " + usr.Surname;
-                var notes = await ReturnActualMonthNotes(family.USRId);
 
                 familyInfo.UsrId = usr.Id;
             }
+
+            var notes = await ReturnActualMonthNotes(familyId, userId);
 
             var psy = await _users.Find<User>(x => x.Id == family.PSYId).FirstOrDefaultAsync();
             
@@ -216,6 +230,11 @@ namespace API.Helpers
             familyInfo.FamilyName = family.FamilyName;
             
             familyInfo.InvitationCode = family.InvitationCode;
+            
+            foreach (var note in notes)
+            {
+                familyInfo.CalendarNotes.Add(_mapper.Map<ReturnCalendarNoteDTO>(note));
+            }
 
             return familyInfo;
         }

@@ -38,7 +38,7 @@ namespace API.Controllers
 
             var family = await _apiHelper.CreateFamily(id, createFamilyDTO.FamilyName);
 
-            var familyToReturn = await _apiHelper.ReturnFamilyInfo(family.Id);
+            var familyToReturn = await _apiHelper.ReturnFamilyInfo(family.Id, id);
 
             return familyToReturn;
         }
@@ -62,7 +62,7 @@ namespace API.Controllers
                 errors = "Bad invitation code or you are already in family."
             });
 
-            var familyToReturn = await _apiHelper.ReturnFamilyInfo(family.Id);
+            var familyToReturn = await _apiHelper.ReturnFamilyInfo(family.Id, id);
 
             return familyToReturn;
         }

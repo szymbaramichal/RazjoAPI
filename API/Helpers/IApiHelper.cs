@@ -22,14 +22,14 @@ namespace API.Helpers
 
         #region CalendarMethods
         Task<CalendarNote> AddCalendarNote(CalendarNote calendarNote, string userId);
-        Task<List<CalendarNote>> ReturnActualMonthNotes(string userId);
-        Task<List<CalendarNote>> ReturnNotesForMonth(string userId, int month);
+        Task<List<CalendarNote>> ReturnActualMonthNotes(string familyId, string userId);
+        Task<List<CalendarNote>> ReturnNotesForMonth(string familyId, string userId, int month);
         #endregion
 
         #region FamilyMethods
         Task<Family> CreateFamily(string id, string familyName);
         Task<Family> JoinToFamily(string invitationCode, string id);
-        Task<ReturnFamilyDTO> ReturnFamilyInfo(string familyId);
+        Task<ReturnFamilyDTO> ReturnFamilyInfo(string familyId, string userId);
         #endregion
 
     }

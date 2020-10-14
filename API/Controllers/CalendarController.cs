@@ -33,10 +33,12 @@ namespace API.Controllers
         {
             var id = _tokenHelper.GetIdByToken(HttpContext.Request.Headers["Authorization"]);
 
-            if(await _apiHelper.ReturnUserRole(id) != "USR") return BadRequest(new {
-                errors = "As psychologist you can't add normal note to calendar."
+            var family = await _apiHelper.ReturnFamilyInfo(addCalendarNoteDTO.FamilyId, id);
+
+            if(family == null) return BadRequest(new {
+                errors = "Invalid family id or you do not belong to this family."
             });
-            
+
             var mappedNote = _mapper.Map<CalendarNote>(addCalendarNoteDTO);
             
             var calendarNote = await _apiHelper.AddCalendarNote(mappedNote, id);
@@ -48,11 +50,15 @@ namespace API.Controllers
         ///Get notes from actual month by token
         ///</summary>
         [HttpGet("getLastNotes")]
-        public async Task<ActionResult<List<ReturnCalendarNoteDTO>>> GetLastCalendarNotes()
+        public async Task<ActionResult<List<ReturnCalendarNoteDTO>>> GetLastCalendarNotes(GetNotesForActualMonthDTO getNotesForActualMonthDTO)
         {
             var id = _tokenHelper.GetIdByToken(HttpContext.Request.Headers["Authorization"]);
 
-            var notes = await _apiHelper.ReturnActualMonthNotes(id);
+            var notes = await _apiHelper.ReturnActualMonthNotes(getNotesForActualMonthDTO.FamilyId, id);
+
+            if(notes == null) return BadRequest(new {
+                errors = "Invalid family id or you do not belong to this family."
+            });
 
             List<ReturnCalendarNoteDTO> mappedNotes = new List<ReturnCalendarNoteDTO>();
 
@@ -72,7 +78,11 @@ namespace API.Controllers
         {
             var id = _tokenHelper.GetIdByToken(HttpContext.Request.Headers["Authorization"]);
 
-            var notes = await _apiHelper.ReturnNotesForMonth(id, getNotesForMonthDTO.Month);
+            var notes = await _apiHelper.ReturnNotesForMonth(getNotesForMonthDTO.FamilyId, id, getNotesForMonthDTO.Month);
+                        
+            if(notes == null) return BadRequest(new {
+                errors = "You do not belong to this family."
+            });
 
             List<ReturnCalendarNoteDTO> mappedNotes = new List<ReturnCalendarNoteDTO>();
 

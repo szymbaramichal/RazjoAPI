@@ -1,10 +1,8 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace API.DTOs
 {
     public class AddCalendarNoteDTO
     {
-        [Required]
+        public string FamilyId { get; set; }
         public string Message { get; set; }
     }
 }
