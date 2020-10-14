@@ -32,5 +32,9 @@ namespace API.Helpers
         Task<ReturnFamilyDTO> ReturnFamilyInfo(string familyId, string userId);
         #endregion
 
+        #region PrivateNotesMethods
+        Task<PrivateNote> AddPrivateNote(string message, string userId);
+        Task<List<PrivateNote>> ReturnUserPrivateNotes(string userId);
+        #endregion
     }
 }

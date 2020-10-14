@@ -19,6 +19,7 @@ namespace API.Helpers
         private IMongoCollection<Value> _values;
         private IMongoCollection<CalendarNote> _calendarNotes;
         private IMongoCollection<Family> _familes;
+        private IMongoCollection<PrivateNote> _privateNotes;
         private IMongoDatabase database;
 
         #endregion
@@ -34,6 +35,7 @@ namespace API.Helpers
             _values = database.GetCollection<Value>("Values");
             _calendarNotes = database.GetCollection<CalendarNote>("CalendarNotes");
             _familes = database.GetCollection<Family>("Families");
+            _privateNotes = database.GetCollection<PrivateNote>("PrivateNotes");
         }
         #endregion
 
@@ -237,6 +239,26 @@ namespace API.Helpers
             }
 
             return familyInfo;
+        }
+        #endregion
+    
+        #region PrivateNotesMethods
+        public async Task<PrivateNote> AddPrivateNote(string message, string userId)
+        {
+            PrivateNote noteToAdd = new PrivateNote{
+                Message = message,
+                UserId = userId,
+                CreationDate = DateTime.Now.ToUniversalTime()
+            };
+            await _privateNotes.InsertOneAsync(noteToAdd);
+
+            return noteToAdd;
+        }
+        public async Task<List<PrivateNote>> ReturnUserPrivateNotes(string userId)
+        {
+            List<PrivateNote> notes = await _privateNotes.Find<PrivateNote>(x => x.UserId == userId).ToListAsync();    
+
+            return notes;        
         }
         #endregion
     }

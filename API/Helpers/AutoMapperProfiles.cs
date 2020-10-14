@@ -14,6 +14,8 @@ namespace API.Helpers
             CreateMap<CalendarNote, ReturnCalendarNoteDTO>();
             CreateMap<Family, ReturnFamilyDTO>();
             CreateMap<User, UserInfoDTO>();
+            CreateMap<ReturnPrivateNoteDTO, PrivateNote>();
+            CreateMap<PrivateNote, ReturnPrivateNoteDTO>();
         }
     }
 }

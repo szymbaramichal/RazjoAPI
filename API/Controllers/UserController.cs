@@ -57,33 +57,23 @@ namespace API.Controllers
                     errors = "Invalid password or email."
                 });
             }
-            
-            //var notes = await _apiHelper.ReturnActualMonthNotes(user.Id);
 
             var userToReturn = new ReturnUserDTO();
 
-            //if(user.Role == "USR")
-            //{
-
-                List<ReturnCalendarNoteDTO> mappedNotes = new List<ReturnCalendarNoteDTO>();
-
-                //foreach (var note in notes)
-                //{
-                //    mappedNotes.Add(_mapper.Map<ReturnCalendarNoteDTO>(note));
-                //}
-
-                userToReturn.CalendarNotes = mappedNotes;
-            //}
-
-            userToReturn.Token = _tokenHelper.CreateToken(user);
-
             userToReturn.Families = new List<ReturnFamilyDTO>();
-
             for (int i = 0; i < user.FamilyId.Count; i++)
             {
                 userToReturn.Families.Add(await _apiHelper.ReturnFamilyInfo(user.FamilyId[i], user.Id));
             }
 
+            var privateNotes = await _apiHelper.ReturnUserPrivateNotes(user.Id);
+            userToReturn.PrivateNotes = new List<ReturnPrivateNoteDTO>();
+            for (int i = 0; i < privateNotes.Count; i++)
+            {
+                userToReturn.PrivateNotes.Add(_mapper.Map<ReturnPrivateNoteDTO>(privateNotes[i]));
+            }
+
+            userToReturn.Token = _tokenHelper.CreateToken(user);
             userToReturn.UserInfo = _mapper.Map<UserInfoDTO>(user);
 
             return userToReturn;

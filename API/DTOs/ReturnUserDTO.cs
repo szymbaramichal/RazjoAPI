@@ -6,7 +6,7 @@ namespace API.DTOs
     {
         public string Token { get; set; }
         public UserInfoDTO UserInfo { get; set; }
-        public List<ReturnCalendarNoteDTO> CalendarNotes { get; set; }
+        public List<ReturnPrivateNoteDTO> PrivateNotes { get; set; }
         public List<ReturnFamilyDTO> Families { get; set; }
     }
 }
