@@ -43,5 +43,11 @@ namespace API.Controllers
             return value;
         }
 
+        [HttpGet]
+        public IActionResult TestMethod()
+        {
+            return Ok("Dziala");
+        }
+
     }
 }
