@@ -1,3 +1,4 @@
+using API.Helpers;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -11,9 +12,7 @@ namespace API.Models
         public string UserId { get; set; }
         public string UserRole { get; set; }
         public string FamilyId { get; set; }
-        public int Day { get; set; }
-        public int Month { get; set; }
-        public int Year { get; set; }
+        public Date Date { get; set; }
         public string Message { get; set; }
     }
 }

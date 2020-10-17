@@ -145,9 +145,13 @@ namespace API.Helpers
         #region CalendarMethods
         public async Task<CalendarNote> AddCalendarNote(CalendarNote calendarNote, string userId)
         {
-            calendarNote.Day = DateTime.Today.Day;
-            calendarNote.Month = DateTime.Today.Month;
-            calendarNote.Year = DateTime.Today.Year;
+            calendarNote.Date = new Date{
+                Day = DateTime.Now.Day,
+                Month = DateTime.Now.Month,
+                Year = DateTime.Now.Year,
+                Minute = DateTime.Now.Minute,
+                Hour = DateTime.Now.Hour
+            };
 
             calendarNote.UserId = userId;
             calendarNote.UserRole = await ReturnUserRole(userId);
@@ -162,11 +166,13 @@ namespace API.Helpers
 
             if(family.PSYId == userId || family.USRId == userId)
             {
-                var notes = await _calendarNotes.Find<CalendarNote>(x => x.FamilyId == familyId && x.Month == DateTime.Today.Month && x.Year == DateTime.Today.Year).ToListAsync();
+                var notes = await _calendarNotes.Find<CalendarNote>(x => x.FamilyId == familyId && 
+                x.Date.Month == DateTime.Now.Month && 
+                x.Date.Year == DateTime.Today.Year).ToListAsync();
                 return notes;
             }
-            else return null;
 
+            else return null;
         }
         public async Task<List<CalendarNote>> ReturnNotesForMonth(string familyId, string userId, int month)
         {
@@ -174,7 +180,7 @@ namespace API.Helpers
 
             if(family.PSYId == userId || family.USRId == userId)
             {
-                var notes = await _calendarNotes.Find<CalendarNote>(x => x.FamilyId == familyId && x.Month == month).ToListAsync();
+                var notes = await _calendarNotes.Find<CalendarNote>(x => x.FamilyId == familyId && x.Date.Month == DateTime.Now.Month).ToListAsync();
                 return notes;
             }
             else return null;
@@ -289,7 +295,13 @@ namespace API.Helpers
             PrivateNote noteToAdd = new PrivateNote{
                 Message = message,
                 UserId = userId,
-                CreationDate = DateTime.Now.ToUniversalTime()
+                CreationDate = new Date{
+                    Day = DateTime.Now.Day,
+                    Month = DateTime.Now.Month,
+                    Year = DateTime.Now.Year,
+                    Minute = DateTime.Now.Minute,
+                    Hour = DateTime.Now.Hour
+                }
             };
             await _privateNotes.InsertOneAsync(noteToAdd);
 

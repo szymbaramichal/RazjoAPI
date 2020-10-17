@@ -1,9 +1,10 @@
 using System;
+using API.Helpers;
 
 namespace API.DTOs
 {
     public class AddVisitDTO
     {
-        public DateTime Date { get; set; }
+        public Date Date { get; set; }
     }
 }
