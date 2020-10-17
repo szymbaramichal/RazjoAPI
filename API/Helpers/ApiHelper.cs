@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -67,7 +68,7 @@ namespace API.Helpers
             {
                 From = new MailAddress("Razjo@razjo.com"),
                 Subject = "Dziękujemy za skorzystanie z naszej aplikacji!",
-                Body = "<h1>Test message</h1>",
+                Body = File.ReadAllText("./mail.txt"),
                 IsBodyHtml = true,
             };
 
