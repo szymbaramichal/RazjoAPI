@@ -16,6 +16,10 @@ namespace API.Helpers
             CreateMap<User, UserInfoDTO>();
             CreateMap<ReturnPrivateNoteDTO, PrivateNote>();
             CreateMap<PrivateNote, ReturnPrivateNoteDTO>();
+            CreateMap<Visit, AddVisitDTO>();
+            CreateMap<AddVisitDTO, Visit>();
+            CreateMap<ReturnVisitDTO, Visit>();
+            CreateMap<Visit, ReturnVisitDTO>();
         }
     }
 }

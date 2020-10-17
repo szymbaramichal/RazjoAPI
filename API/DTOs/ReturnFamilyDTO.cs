@@ -12,5 +12,6 @@ namespace API.DTOs
         public string UserNames { get; set; }
         public string InvitationCode { get; set; }
         public List<ReturnCalendarNoteDTO> CalendarNotes { get; set; }
+        public List<ReturnVisitDTO> Visits { get; set; }
     }
 }

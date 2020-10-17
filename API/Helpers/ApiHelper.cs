@@ -180,28 +180,50 @@ namespace API.Helpers
 
             if(family.PSYId == userId || family.USRId == userId)
             {
-                var notes = await _calendarNotes.Find<CalendarNote>(x => x.FamilyId == familyId && x.Date.Month == DateTime.Now.Month).ToListAsync();
+                var notes = await _calendarNotes.Find<CalendarNote>(x => x.FamilyId == familyId && x.Date.Month == month).ToListAsync();
                 return notes;
             }
             else return null;
         }
 
        
-        public async Task<Visit> AddVisit(Visit visit, string familyId, string userId)
+        public async Task<Visit> AddVisit(Visit visit, string userId)
         {
-            var family = await ReturnFamilyInfo(familyId, userId);
+            var family = await ReturnFamilyInfo(visit.FamilyId, userId);
             if(family == null)
             {
                 return null;
             }
-
-            visit.FamilyId = familyId;
             
             await _visits.InsertOneAsync(visit);
 
             return visit;
         }
-       
+        public async Task<List<Visit>> ReturnCurrentMonthVisits(string familyId, string userId)
+        {
+            var family = await _familes.Find<Family>(x => x.Id == familyId).FirstOrDefaultAsync();
+
+            if(family.PSYId == userId || family.USRId == userId)
+            {
+                var visits = await _visits.Find<Visit>(x => x.FamilyId == familyId && 
+                x.Date.Month == DateTime.Now.Month && 
+                x.Date.Year == DateTime.Today.Year).ToListAsync();
+                return visits;
+            }
+
+            else return null;
+        }
+        public async Task<List<Visit>> ReturnVisitsForMonth(string familyId, string userId, int month)
+        {
+            var family = await _familes.Find<Family>(x => x.Id == familyId).FirstOrDefaultAsync();
+
+            if(family.PSYId == userId || family.USRId == userId)
+            {
+                var visits = await _visits.Find<Visit>(x => x.FamilyId == familyId && x.Date.Month == month).ToListAsync();
+                return visits;
+            }
+            else return null;
+        }
         #endregion
     
         #region FamilyMethods
@@ -225,7 +247,6 @@ namespace API.Helpers
             
             return familyToAdd;
         }
-
         public async Task<Family> JoinToFamily(string invitationCode, string id)
         {
             var family = await _familes.Find<Family>(x => x.InvitationCode == invitationCode).FirstOrDefaultAsync();
@@ -236,7 +257,7 @@ namespace API.Helpers
 
             if(user.Role == "USR")
             {
-                if(user.FamilyId.Count > 0) return null;
+                if(user.FamilyId.Count > 0 || family.USRId != null) return null;
             }
 
             family.USRId = id;
@@ -248,7 +269,6 @@ namespace API.Helpers
 
             return family;
         }
-
         public async Task<ReturnFamilyDTO> ReturnFamilyInfo(string familyId, string userId)
         {
             var family = await _familes.Find<Family>(x => x.Id == familyId).FirstOrDefaultAsync();;
@@ -259,6 +279,7 @@ namespace API.Helpers
 
             var familyInfo = new ReturnFamilyDTO();
             familyInfo.CalendarNotes = new List<ReturnCalendarNoteDTO>();
+            familyInfo.Visits = new List<ReturnVisitDTO>();
 
             if(family.USRId != null)
             {
@@ -269,6 +290,7 @@ namespace API.Helpers
             }
 
             var notes = await ReturnActualMonthNotes(familyId, userId);
+            var visits = await ReturnCurrentMonthVisits(familyId, userId);
 
             var psy = await _users.Find<User>(x => x.Id == family.PSYId).FirstOrDefaultAsync();
             
@@ -283,6 +305,11 @@ namespace API.Helpers
             foreach (var note in notes)
             {
                 familyInfo.CalendarNotes.Add(_mapper.Map<ReturnCalendarNoteDTO>(note));
+            }
+
+            foreach (var visit in visits)
+            {
+                familyInfo.Visits.Add(_mapper.Map<ReturnVisitDTO>(visit));
             }
 
             return familyInfo;
