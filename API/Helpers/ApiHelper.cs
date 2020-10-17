@@ -23,6 +23,7 @@ namespace API.Helpers
         private IMongoCollection<CalendarNote> _calendarNotes;
         private IMongoCollection<Family> _familes;
         private IMongoCollection<PrivateNote> _privateNotes;
+        private IMongoCollection<Visit> _visits;
         private IMongoDatabase database;
 
         #endregion
@@ -39,6 +40,7 @@ namespace API.Helpers
             _calendarNotes = database.GetCollection<CalendarNote>("CalendarNotes");
             _familes = database.GetCollection<Family>("Families");
             _privateNotes = database.GetCollection<PrivateNote>("PrivateNotes");
+            _visits = database.GetCollection<Visit>("Visits");
         }
         #endregion
 
@@ -160,7 +162,7 @@ namespace API.Helpers
 
             if(family.PSYId == userId || family.USRId == userId)
             {
-                var notes = await _calendarNotes.Find<CalendarNote>(x => x.FamilyId == familyId && x.Month == DateTime.Today.Month).ToListAsync();
+                var notes = await _calendarNotes.Find<CalendarNote>(x => x.FamilyId == familyId && x.Month == DateTime.Today.Month && x.Year == DateTime.Today.Year).ToListAsync();
                 return notes;
             }
             else return null;
@@ -178,6 +180,22 @@ namespace API.Helpers
             else return null;
         }
 
+       
+        public async Task<Visit> AddVisit(Visit visit, string familyId, string userId)
+        {
+            var family = await ReturnFamilyInfo(familyId, userId);
+            if(family == null)
+            {
+                return null;
+            }
+
+            visit.FamilyId = familyId;
+            
+            await _visits.InsertOneAsync(visit);
+
+            return visit;
+        }
+       
         #endregion
     
         #region FamilyMethods
@@ -227,14 +245,14 @@ namespace API.Helpers
 
         public async Task<ReturnFamilyDTO> ReturnFamilyInfo(string familyId, string userId)
         {
-            var familyInfo = new ReturnFamilyDTO();
-            familyInfo.CalendarNotes = new List<ReturnCalendarNoteDTO>();
-
-            var family = await _familes.Find<Family>(x => x.Id == familyId).FirstOrDefaultAsync();
+            var family = await _familes.Find<Family>(x => x.Id == familyId).FirstOrDefaultAsync();;
 
             if(family == null) return null;
 
             if(family.PSYId != userId && family.USRId != userId) return null;
+
+            var familyInfo = new ReturnFamilyDTO();
+            familyInfo.CalendarNotes = new List<ReturnCalendarNoteDTO>();
 
             if(family.USRId != null)
             {

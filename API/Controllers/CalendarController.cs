@@ -93,5 +93,12 @@ namespace API.Controllers
 
             return mappedNotes;
         }
+    
+        [HttpPost]
+        public async Task<ActionResult> AddVisit(AddVisitDTO addVisitDTO)
+        {
+            return Ok(addVisitDTO.Date);
+        }
+
     }
 }
