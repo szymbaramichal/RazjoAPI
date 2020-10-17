@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,6 +54,26 @@ namespace API.Helpers
             user.FirstName = "";
             user.Surname = "";
             user.FamilyId = new List<string>();
+
+            var smtpClient = new SmtpClient("smtp.gmail.com")
+            {
+                Port = 587,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential("testrazjo@gmail.com", "TestRazjo2115"),
+                EnableSsl = true
+            };
+
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress("Razjo@razjo.com"),
+                Subject = "Dziękujemy za skorzystanie z naszej aplikacji!",
+                Body = "<h1>Test message</h1>",
+                IsBodyHtml = true,
+            };
+
+            mailMessage.To.Add(user.Email);
+
+            smtpClient.Send(mailMessage);
 
             await _users.InsertOneAsync(user);
 
