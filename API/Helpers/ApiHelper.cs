@@ -54,8 +54,6 @@ namespace API.Helpers
             user.Email = user.Email.ToLower();
             user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
             user.PasswordSalt = hmac.Key;
-            user.FirstName = "";
-            user.Surname = "";
             user.FamilyId = new List<string>();
 
             var smtpClient = new SmtpClient("smtp.gmail.com")
