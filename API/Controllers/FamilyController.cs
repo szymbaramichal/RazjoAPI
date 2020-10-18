@@ -67,6 +67,9 @@ namespace API.Controllers
             return familyToReturn;
         }
 
+        ///<summary>
+        ///Send mail with invitation code to family by PSY user
+        ///</summary>
         [HttpPost("sendMailWithCode")]
         public async Task<IActionResult> SendMailWithCode(SendMailDTO sendMailDTO)
         {
