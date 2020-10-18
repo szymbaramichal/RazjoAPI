@@ -68,13 +68,13 @@ namespace API.Helpers
             {
                 From = new MailAddress("Razjo@razjo.com"),
                 Subject = "Dziękujemy za skorzystanie z naszej aplikacji!",
-                Body = File.ReadAllText("./../API/mail.txt"),
+                Body = File.ReadAllText("./../API/RegistrationMail.txt"),
                 IsBodyHtml = true,
             };
 
             mailMessage.To.Add(user.Email);
 
-            smtpClient.Send(mailMessage);
+            await smtpClient.SendMailAsync(mailMessage);
 
             await _users.InsertOneAsync(user);
 
@@ -311,6 +311,37 @@ namespace API.Helpers
             }
 
             return familyInfo;
+        }
+        public async Task<bool> SendMailWithCode(string userMail, string familyId, string performerId)
+        {
+            var family = await _familes.Find<Family>(x => x.Id == familyId).FirstOrDefaultAsync();
+
+            if(family == null) return false;
+            if(family.PSYId == performerId)
+            {
+                var smtpClient = new SmtpClient("smtp.gmail.com")
+                {
+                    Port = 587,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential("testrazjo@gmail.com", "TestRazjo2115"),
+                    EnableSsl = true
+                };
+
+                var mailMessage = new MailMessage
+                {
+                    From = new MailAddress("Razjo@razjo.com"),
+                    Subject = family.FamilyName + " - " + family.InvitationCode,
+                    Body = File.ReadAllText("./../API/CodeMail.txt"),
+                    IsBodyHtml = true,
+                };
+                
+                mailMessage.To.Add(userMail);
+
+                await smtpClient.SendMailAsync(mailMessage);
+
+                return true;
+            }
+            else return false;
         }
         #endregion
     

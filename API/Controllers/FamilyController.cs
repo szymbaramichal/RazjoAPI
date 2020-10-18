@@ -66,5 +66,21 @@ namespace API.Controllers
 
             return familyToReturn;
         }
+
+        [HttpPost("sendMailWithCode")]
+        public async Task<IActionResult> SendMailWithCode(SendMailDTO sendMailDTO)
+        {
+            var id = _tokenHelper.GetIdByToken(HttpContext.Request.Headers["Authorization"]);
+
+            var isMailSend = await _apiHelper.SendMailWithCode(sendMailDTO.Email, sendMailDTO.FamilyId, id);
+            
+            if(!isMailSend) return BadRequest(new {
+                errors = "Invalid familyId or you are not owner of this family."
+            });
+
+            return Ok(new {
+                message = "Mail has been sent."
+            });
+        }
     }
 }

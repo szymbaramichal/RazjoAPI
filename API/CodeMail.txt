@@ -5,18 +5,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Mail</title>
     <style>
-      /* -------------------------------------
-          GLOBAL RESETS
-      ------------------------------------- */
-      
-      /*All the styling goes here*/
-      
-      img {
-        border: none;
-        -ms-interpolation-mode: bicubic;
-        max-width: 100%; 
-      }
-
       body {
         background-color: #f6f6f6;
         font-family: sans-serif;
@@ -40,16 +28,11 @@
           vertical-align: top; 
       }
 
-      /* -------------------------------------
-          BODY & CONTAINER
-      ------------------------------------- */
-
       .body {
         background-color: #f6f6f6;
         width: 100%; 
       }
 
-      /* Set a max-width, and make it display as block so it will automatically stretch to that width, but will also shrink down on a phone or something */
       .container {
         display: block;
         margin: 0 auto !important;
@@ -59,7 +42,6 @@
         width: 580px; 
       }
 
-      /* This should also be a block element, so that it will fill 100% of the .container */
       .content {
         box-sizing: border-box;
         display: block;
@@ -68,9 +50,6 @@
         padding: 10px; 
       }
 
-      /* -------------------------------------
-          HEADER, FOOTER, MAIN
-      ------------------------------------- */
       .main {
         background: #ffffff;
         border-radius: 3px;
@@ -102,9 +81,6 @@
           text-align: center; 
       }
 
-      /* -------------------------------------
-          TYPOGRAPHY
-      ------------------------------------- */
       h1,
       h2,
       h3,
@@ -145,51 +121,6 @@
         text-decoration: underline; 
       }
 
-      /* -------------------------------------
-          BUTTONS
-      ------------------------------------- */
-      .btn {
-        box-sizing: border-box;
-        width: 100%; }
-        .btn > tbody > tr > td {
-          padding-bottom: 15px; }
-        .btn table {
-          width: auto; 
-      }
-        .btn table td {
-          background-color: #ffffff;
-          border-radius: 5px;
-          text-align: center; 
-      }
-        .btn a {
-          background-color: #ffffff;
-          border: solid 1px #3498db;
-          border-radius: 5px;
-          box-sizing: border-box;
-          color: #3498db;
-          cursor: pointer;
-          display: inline-block;
-          font-size: 14px;
-          font-weight: bold;
-          margin: 0;
-          padding: 12px 25px;
-          text-decoration: none;
-          text-transform: capitalize; 
-      }
-
-      .btn-primary table td {
-        background-color: #3498db; 
-      }
-
-      .btn-primary a {
-        background-color: #3498db;
-        border-color: #3498db;
-        color: #ffffff; 
-      }
-
-      /* -------------------------------------
-          OTHER STYLES THAT MIGHT BE USEFUL
-      ------------------------------------- */
       .last {
         margin-bottom: 0; 
       }
@@ -290,9 +221,6 @@
         }
       }
 
-      /* -------------------------------------
-          PRESERVE THESE STYLES IN THE HEAD
-      ------------------------------------- */
       @media all {
         .ExternalClass {
           width: 100%; 
@@ -333,7 +261,6 @@
     </style>
   </head>
   <body class="">
-    <span class="preheader">This is preheader text. Some clients will show this text as a preview.</span>
     <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
       <tr>
         <td>&nbsp;</td>
@@ -350,7 +277,7 @@
                     <tr>
                       <td>
                         <p>Witaj!</p>
-                        <p>Dziekujemy za zaufanie i za skorzystanie z naszej aplikacji!</p>
+                        <p>W tytule wiadomosci przesylamy kod dolaczenia do rodziny. Zostal on przeslany przez psychologa. </br> Nie zwlekaj! Dołącz jak najszybciej!</p>
                         <br>
                         <p>Mamy nadzieje, ze bedziesz zadowolony z naszych uslug.</p>
                         <p>Powodzenia! :) </p>

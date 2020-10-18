@@ -34,6 +34,7 @@ namespace API.Helpers
         Task<Family> CreateFamily(string id, string familyName);
         Task<Family> JoinToFamily(string invitationCode, string id);
         Task<ReturnFamilyDTO> ReturnFamilyInfo(string familyId, string userId);
+        Task<bool> SendMailWithCode(string userMail, string familyId, string performerId);
         #endregion
 
         #region PrivateNotesMethods
