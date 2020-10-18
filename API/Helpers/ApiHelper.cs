@@ -68,7 +68,7 @@ namespace API.Helpers
             {
                 From = new MailAddress("Razjo@razjo.com"),
                 Subject = "Dziękujemy za skorzystanie z naszej aplikacji!",
-                Body = File.ReadAllText("mail.txt"),
+                Body = File.ReadAllText("./../API/mail.txt"),
                 IsBodyHtml = true,
             };
 
