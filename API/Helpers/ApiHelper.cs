@@ -227,6 +227,8 @@ namespace API.Helpers
         #region FamilyMethods
         public async Task<Family> CreateFamily(string id, string familyName)
         {
+            if(await ReturnUserRole(id) != "PSY") return null;
+
             Random random = new Random();
             string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             var invitationCode = new string(Enumerable.Repeat(chars, 8).Select(s => s[random.Next(s.Length)]).ToArray());
@@ -247,6 +249,8 @@ namespace API.Helpers
         }
         public async Task<Family> JoinToFamily(string invitationCode, string id)
         {
+            if(await ReturnUserRole(id) != "PSY") return null;
+            
             var family = await _familes.Find<Family>(x => x.InvitationCode == invitationCode).FirstOrDefaultAsync();
 
             if(family == null) return null;
