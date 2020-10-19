@@ -33,9 +33,10 @@ namespace API.Controllers
         {
             var id = _tokenHelper.GetIdByToken(HttpContext.Request.Headers["Authorization"]);
 
-            var family = await _apiHelper.ReturnFamilyInfo(addCalendarNoteDTO.FamilyId, id);
+            var isUserInThisFamily = await _apiHelper.DoesUserBelongToFamily(addCalendarNoteDTO.FamilyId, id);
+            
 
-            if(family == null) return BadRequest(new {
+            if(!isUserInThisFamily) return BadRequest(new {
                 errors = "Invalid family id or you do not belong to this family."
             });
 

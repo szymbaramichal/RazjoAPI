@@ -343,6 +343,13 @@ namespace API.Helpers
             }
             else return false;
         }
+        public async Task<bool> DoesUserBelongToFamily(string familyId, string userId)
+        {
+            var family = await _familes.Find<Family>(x => x.Id == familyId).FirstOrDefaultAsync();
+            if(family.PSYId == userId || family.USRId == userId) return true;
+            else return false;
+        }
+        
         #endregion
     
         #region PrivateNotesMethods
