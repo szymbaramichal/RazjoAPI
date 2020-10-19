@@ -28,7 +28,7 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddIdentityServices(_config);
-            services.AddAplicationServices();
+            services.AddAplicationServices(_config);
             
             services.AddAutoMapper(typeof(Startup));
 

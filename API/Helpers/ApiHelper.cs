@@ -29,18 +29,18 @@ namespace API.Helpers
         #endregion
 
         #region Constructor
-        public ApiHelper(IMapper mapper)
+        public ApiHelper(IMapper mapper, IDatabaseSettings settings)
         {
             _mapper = mapper;
 
-            var client = new MongoClient("mongodb+srv://test:test@main.qhp4n.mongodb.net/<dbname>?retryWrites=true&w=majority");
-            database = client.GetDatabase("Razjo");
-            _users = database.GetCollection<User>("Users");
-            _values = database.GetCollection<Value>("Values");
-            _calendarNotes = database.GetCollection<CalendarNote>("CalendarNotes");
-            _familes = database.GetCollection<Family>("Families");
-            _privateNotes = database.GetCollection<PrivateNote>("PrivateNotes");
-            _visits = database.GetCollection<Visit>("Visits");
+            var client = new MongoClient(settings.ConnectionString);
+            database = client.GetDatabase(settings.DatabaseName);
+            _users = database.GetCollection<User>(settings.UsersCollectionName);
+            _values = database.GetCollection<Value>(settings.ValuesCollectionName);
+            _calendarNotes = database.GetCollection<CalendarNote>(settings.CalendarNotesCollectionName);
+            _familes = database.GetCollection<Family>(settings.FamiliesCollectionName);
+            _privateNotes = database.GetCollection<PrivateNote>(settings.PrivateNotesCollectionName);
+            _visits = database.GetCollection<Visit>(settings.VisitsCollectionName);
         }
         #endregion
 
