@@ -144,11 +144,11 @@ namespace API.Helpers
         public async Task<CalendarNote> AddCalendarNote(CalendarNote calendarNote, string userId)
         {
             calendarNote.Date = new Date{
-                Day = DateTime.Now.Day,
-                Month = DateTime.Now.Month,
-                Year = DateTime.Now.Year,
-                Minute = DateTime.Now.Minute,
-                Hour = DateTime.Now.Hour
+                Day = DateTime.Now.Day.ToString(),
+                Month = DateTime.Now.Month.ToString(),
+                Year = DateTime.Now.Year.ToString(),
+                Minute = DateTime.Now.Minute.ToString(),
+                Hour = DateTime.Now.Hour.ToString()
             };
 
             calendarNote.UserId = userId;
@@ -165,14 +165,14 @@ namespace API.Helpers
             if(family.PSYId == userId || family.USRId == userId)
             {
                 var notes = await _calendarNotes.Find<CalendarNote>(x => x.FamilyId == familyId && 
-                x.Date.Month == DateTime.Now.Month && 
-                x.Date.Year == DateTime.Today.Year).ToListAsync();
+                x.Date.Month == DateTime.Now.Month.ToString() && 
+                x.Date.Year == DateTime.Now.Year.ToString()).ToListAsync();
                 return notes;
             }
 
             else return null;
         }
-        public async Task<List<CalendarNote>> ReturnNotesForMonth(string familyId, string userId, int month)
+        public async Task<List<CalendarNote>> ReturnNotesForMonth(string familyId, string userId, string month)
         {
             var family = await _familes.Find<Family>(x => x.Id == familyId).FirstOrDefaultAsync();
 
@@ -204,14 +204,14 @@ namespace API.Helpers
             if(family.PSYId == userId || family.USRId == userId)
             {
                 var visits = await _visits.Find<Visit>(x => x.FamilyId == familyId && 
-                x.Date.Month == DateTime.Now.Month && 
-                x.Date.Year == DateTime.Today.Year).ToListAsync();
+                x.Date.Month == DateTime.Now.Month.ToString() && 
+                x.Date.Year == DateTime.Now.Year.ToString()).ToListAsync();
                 return visits;
             }
 
             else return null;
         }
-        public async Task<List<Visit>> ReturnVisitsForMonth(string familyId, string userId, int month)
+        public async Task<List<Visit>> ReturnVisitsForMonth(string familyId, string userId, string month)
         {
             var family = await _familes.Find<Family>(x => x.Id == familyId).FirstOrDefaultAsync();
 
@@ -359,11 +359,11 @@ namespace API.Helpers
                 Message = message,
                 UserId = userId,
                 CreationDate = new Date{
-                    Day = DateTime.Now.Day,
-                    Month = DateTime.Now.Month,
-                    Year = DateTime.Now.Year,
-                    Minute = DateTime.Now.Minute,
-                    Hour = DateTime.Now.Hour
+                    Day = DateTime.Now.Day.ToString(),
+                    Month = DateTime.Now.Month.ToString(),
+                    Year = DateTime.Now.Year.ToString(),
+                    Minute = DateTime.Now.Minute.ToString(),
+                    Hour = DateTime.Now.Hour.ToString()
                 }
             };
             await _privateNotes.InsertOneAsync(noteToAdd);
