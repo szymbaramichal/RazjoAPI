@@ -1,10 +1,10 @@
-using System;
+using API.Helpers;
 
 namespace API.DTOs
 {
     public class ReturnPrivateNoteDTO
     {
         public string Message { get; set; }
-        public DateTime CreationDate { get; set; }
+        public Date CreationDate { get; set; }
     }
 }
