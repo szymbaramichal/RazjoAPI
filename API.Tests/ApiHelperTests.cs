@@ -9,6 +9,8 @@ using Xunit;
 
 namespace API.Tests
 {
+
+    //BEFORE TESTING, DROP DATABASE!
     public class ApiHelperTests
     {
         #region UserMethodsTests
@@ -34,11 +36,11 @@ namespace API.Tests
 
             #region Data_To_Database
             var user = new User{
-                Email = "test123@mail.com",
+                Email = "test123psy@mail.com",
                 FamilyId = new List<string>(),
                 FirstName = "FirstName",
                 Surname = "Surname",
-                Role = "USR"
+                Role = "PSY"
             };
             #endregion
 
@@ -199,7 +201,7 @@ namespace API.Tests
             #endregion
 
             #region Data_To_Database
-            var id = "5f8df9b8dc5dd44d8a60bf42";
+            var id = "5f8e007f3959cc26088ffb86";
             #endregion
 
             #region Test_Method
@@ -208,6 +210,43 @@ namespace API.Tests
             Assert.NotNull(result);
             Assert.Equal("FamilyName", result.FamilyName);
             #endregion
+        }
+
+        [Fact]
+        public async Task JoinToFamily()
+        {
+            #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
+            var config = new MapperConfiguration(opts => {});
+            var settings = new DatabaseSettings{
+                ValuesCollectionName = "Test_Values",
+                UsersCollectionName = "Test_Users",
+                CalendarNotesCollectionName = "Test_CalendarNotes",
+                VisitsCollectionName = "Test_Visits",
+                FamiliesCollectionName = "Test_Families",
+                PrivateNotesCollectionName = "Test_PrivateNotes",
+                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
+                DatabaseName = "Test_Razjo"
+            };
+
+            var mapper = config.CreateMapper(); 
+            var apiHelper = new ApiHelper(mapper, settings);
+            #endregion
+
+            #region Data_To_Database
+            var id = "5f8df9b8dc5dd44d8a60bf42";
+            #endregion
+
+            #region Test_Method
+            var result = await apiHelper.JoinToFamily("QO8a8Txm", id);
+
+            Assert.NotNull(result);
+            Assert.Equal("FamilyName", result.FamilyName);
+            #endregion
+        }
+
+        public async Task ReturnFamilyInfo()
+        {
+            
         }
 
         #endregion
