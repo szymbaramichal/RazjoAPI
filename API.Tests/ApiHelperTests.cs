@@ -416,5 +416,213 @@ namespace API.Tests
             #endregion
         }
         #endregion
+    
+        #region CalendarTests
+        [Fact]
+        public async Task AddCalendarNote()
+        {
+            #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
+            var config = new MapperConfiguration(opts => {});
+            var settings = new DatabaseSettings{
+                ValuesCollectionName = "Test_Values",
+                UsersCollectionName = "Test_Users",
+                CalendarNotesCollectionName = "Test_CalendarNotes",
+                VisitsCollectionName = "Test_Visits",
+                FamiliesCollectionName = "Test_Families",
+                PrivateNotesCollectionName = "Test_PrivateNotes",
+                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
+                DatabaseName = "Test_Razjo"
+            };
+
+            var mapper = config.CreateMapper(); 
+            var apiHelper = new ApiHelper(mapper, settings);
+            #endregion
+
+            #region Data_To_Database
+            CalendarNote calendarNote = new CalendarNote{
+                Date = new Date {
+                    Day = DateTime.Now.Day.ToString(),
+                    Month = DateTime.Now.Month.ToString(),
+                    Year = DateTime.Now.Year.ToString(),
+                    Minute = DateTime.Now.Minute.ToString(),
+                    Hour = DateTime.Now.Hour.ToString()
+                },
+                FamilyId = familyId,
+                Message = "message",
+            };
+
+            #endregion
+
+            #region Test_Method
+            var result = await apiHelper.AddCalendarNote(calendarNote ,psyId);
+
+            Assert.NotNull(result);
+            Assert.Equal("message", result.Message);
+            Assert.Equal(psyId, result.UserId);
+            Assert.Equal(DateTime.Now.Day.ToString(), result.Date.Day);
+            Assert.Equal(DateTime.Now.Month.ToString(), result.Date.Month);
+            Assert.Equal(DateTime.Now.Year.ToString(), result.Date.Year);
+            Assert.Equal(DateTime.Now.Minute.ToString(), result.Date.Minute);
+            Assert.Equal(DateTime.Now.Hour.ToString(), result.Date.Hour);
+            #endregion
+        }
+
+        [Fact]
+        public async Task ReturnCurrentMonthNotes()
+        {
+            #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
+            var config = new MapperConfiguration(opts => {});
+            var settings = new DatabaseSettings{
+                ValuesCollectionName = "Test_Values",
+                UsersCollectionName = "Test_Users",
+                CalendarNotesCollectionName = "Test_CalendarNotes",
+                VisitsCollectionName = "Test_Visits",
+                FamiliesCollectionName = "Test_Families",
+                PrivateNotesCollectionName = "Test_PrivateNotes",
+                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
+                DatabaseName = "Test_Razjo"
+            };
+
+            var mapper = config.CreateMapper(); 
+            var apiHelper = new ApiHelper(mapper, settings);
+            #endregion
+
+            #region Test_Method
+            var result = await apiHelper.ReturnCurrentMonthNotes(familyId, psyId);
+
+            Assert.NotNull(result);
+            #endregion
+        }
+
+        [Fact]
+        public async Task ReturnNotesForMonth()
+        {
+            #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
+            var config = new MapperConfiguration(opts => {});
+            var settings = new DatabaseSettings{
+                ValuesCollectionName = "Test_Values",
+                UsersCollectionName = "Test_Users",
+                CalendarNotesCollectionName = "Test_CalendarNotes",
+                VisitsCollectionName = "Test_Visits",
+                FamiliesCollectionName = "Test_Families",
+                PrivateNotesCollectionName = "Test_PrivateNotes",
+                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
+                DatabaseName = "Test_Razjo"
+            };
+
+            var mapper = config.CreateMapper(); 
+            var apiHelper = new ApiHelper(mapper, settings);
+            #endregion
+
+            #region Test_Method
+            var result = await apiHelper.ReturnNotesForMonth(familyId, psyId, "10");
+
+            Assert.NotNull(result);
+            #endregion
+        }
+
+        [Fact]
+        public async Task AddVisit()
+        {
+            #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
+            var config = new MapperConfiguration(opts => {});
+            var settings = new DatabaseSettings{
+                ValuesCollectionName = "Test_Values",
+                UsersCollectionName = "Test_Users",
+                CalendarNotesCollectionName = "Test_CalendarNotes",
+                VisitsCollectionName = "Test_Visits",
+                FamiliesCollectionName = "Test_Families",
+                PrivateNotesCollectionName = "Test_PrivateNotes",
+                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
+                DatabaseName = "Test_Razjo"
+            };
+
+            var mapper = config.CreateMapper(); 
+            var apiHelper = new ApiHelper(mapper, settings);
+            #endregion
+
+            #region Data_To_Database
+            var visit = new Visit{
+                Date = new Date {
+                    Day = DateTime.Now.Day.ToString(),
+                    Month = DateTime.Now.Month.ToString(),
+                    Year = DateTime.Now.Year.ToString(),
+                    Minute = DateTime.Now.Minute.ToString(),
+                    Hour = DateTime.Now.Hour.ToString()
+                },
+                FamilyId = familyId,
+                Message = "message"
+            };
+
+            #endregion
+
+            #region Test_Method
+            var result = await apiHelper.AddVisit(visit, psyId);
+
+            Assert.NotNull(result);
+            Assert.Equal("message", result.Message);
+            Assert.Equal(familyId, result.FamilyId);
+            Assert.Equal(DateTime.Now.Day.ToString(), result.Date.Day);
+            Assert.Equal(DateTime.Now.Month.ToString(), result.Date.Month);
+            Assert.Equal(DateTime.Now.Year.ToString(), result.Date.Year);
+            Assert.Equal(DateTime.Now.Minute.ToString(), result.Date.Minute);
+            Assert.Equal(DateTime.Now.Hour.ToString(), result.Date.Hour);
+            #endregion
+        }
+
+        [Fact]
+        public async Task ReturnCurrentMonthVisits()
+        {
+            #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
+            var config = new MapperConfiguration(opts => {});
+            var settings = new DatabaseSettings{
+                ValuesCollectionName = "Test_Values",
+                UsersCollectionName = "Test_Users",
+                CalendarNotesCollectionName = "Test_CalendarNotes",
+                VisitsCollectionName = "Test_Visits",
+                FamiliesCollectionName = "Test_Families",
+                PrivateNotesCollectionName = "Test_PrivateNotes",
+                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
+                DatabaseName = "Test_Razjo"
+            };
+
+            var mapper = config.CreateMapper(); 
+            var apiHelper = new ApiHelper(mapper, settings);
+            #endregion
+
+            #region Test_Method
+            var result = await apiHelper.ReturnCurrentMonthVisits(familyId, psyId);
+
+            Assert.NotNull(result);
+            #endregion
+        }
+
+        [Fact]
+        public async Task ReturnVisitsForMonth()
+        {
+            #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
+            var config = new MapperConfiguration(opts => {});
+            var settings = new DatabaseSettings{
+                ValuesCollectionName = "Test_Values",
+                UsersCollectionName = "Test_Users",
+                CalendarNotesCollectionName = "Test_CalendarNotes",
+                VisitsCollectionName = "Test_Visits",
+                FamiliesCollectionName = "Test_Families",
+                PrivateNotesCollectionName = "Test_PrivateNotes",
+                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
+                DatabaseName = "Test_Razjo"
+            };
+
+            var mapper = config.CreateMapper(); 
+            var apiHelper = new ApiHelper(mapper, settings);
+            #endregion
+
+            #region Test_Method
+            var result = await apiHelper.ReturnVisitsForMonth(familyId, psyId, "10");
+
+            Assert.NotNull(result);
+            #endregion
+        }
+        #endregion
     }
 }

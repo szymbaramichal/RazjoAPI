@@ -12,7 +12,7 @@
         </member>
         <member name="M:API.Controllers.CalendarController.GetLastCalendarNotes(API.DTOs.GetNotesForActualMonthDTO)">
             <summary>
-            Get notes from actual month by token
+            Get notes from current month by token
             </summary>
         </member>
         <member name="M:API.Controllers.CalendarController.GetNotesForPassedMonth(API.DTOs.GetNotesForMonthDTO)">
@@ -65,7 +65,7 @@
         </member>
         <member name="M:API.Controllers.UserController.RegisterSingleUser(API.DTOs.RegisterUserDTO)">
             <summary>
-             Register user on platform,      PSY-psychlogist, USR-user
+             Register user on platform, PSY-psychlogist/USR-user
             </summary>
              <param name="registerUserDTO">Email, Password and Role</param>
         </member>
@@ -80,18 +80,6 @@
              Update user Firstname and Surname.
             </summary>
              <param name="updateUserInfoDTO">Input object</param>
-        </member>
-        <member name="M:API.Controllers.ValuesController.GetValueById(System.String)">
-            <summary>
-             Test method to test authorization
-            </summary>
-             <param name="id">Id of value</param>
-        </member>
-        <member name="M:API.Controllers.ValuesController.AddValue(API.DTOs.AddValuesDTO)">
-            <summary>
-             Test method to add value 
-            </summary>
-             <param name="addValuesDTO">Input object</param>
         </member>
     </members>
 </doc>

@@ -27,7 +27,7 @@ x86/
 [Aa][Rr][Mm]64/
 bld/
 API/bin
-API.Tests\bin\Debug\net5.0
+API.Tests/bin/Debug/net5.0
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
