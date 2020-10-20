@@ -19,7 +19,6 @@ namespace API.Helpers
         #region Variables
         private IMapper _mapper;
         private IMongoCollection<User> _users;
-        private IMongoCollection<Value> _values;
         private IMongoCollection<CalendarNote> _calendarNotes;
         private IMongoCollection<Family> _familes;
         private IMongoCollection<PrivateNote> _privateNotes;
@@ -36,7 +35,6 @@ namespace API.Helpers
             var client = new MongoClient(settings.ConnectionString);
             database = client.GetDatabase(settings.DatabaseName);
             _users = database.GetCollection<User>(settings.UsersCollectionName);
-            _values = database.GetCollection<Value>(settings.ValuesCollectionName);
             _calendarNotes = database.GetCollection<CalendarNote>(settings.CalendarNotesCollectionName);
             _familes = database.GetCollection<Family>(settings.FamiliesCollectionName);
             _privateNotes = database.GetCollection<PrivateNote>(settings.PrivateNotesCollectionName);
@@ -124,20 +122,6 @@ namespace API.Helpers
 
             return user;
         }
-        #endregion
-
-        #region TestMethods
-        public async Task<Value> GetValueById(string id)
-        {
-            return await _values.Find<Value>(x => x.Id == id).FirstOrDefaultAsync();
-        }
-
-        public async Task<Value> AddValue(Value value)
-        {
-            await _values.InsertOneAsync(value);
-            return value;
-        }
-
         #endregion
     
         #region CalendarMethods
