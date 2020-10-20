@@ -354,5 +354,67 @@ namespace API.Tests
 
         #endregion
 
+        #region PrivateNotesMethods
+        [Fact]
+        public async Task AddPrivateNote()
+        {
+            #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
+            var config = new MapperConfiguration(opts => {});
+            var settings = new DatabaseSettings{
+                ValuesCollectionName = "Test_Values",
+                UsersCollectionName = "Test_Users",
+                CalendarNotesCollectionName = "Test_CalendarNotes",
+                VisitsCollectionName = "Test_Visits",
+                FamiliesCollectionName = "Test_Families",
+                PrivateNotesCollectionName = "Test_PrivateNotes",
+                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
+                DatabaseName = "Test_Razjo"
+            };
+
+            var mapper = config.CreateMapper(); 
+            var apiHelper = new ApiHelper(mapper, settings);
+            #endregion
+
+            #region Test_Method
+            var result = await apiHelper.AddPrivateNote("MessageInPrivateNote" ,psyId);
+
+            Assert.NotNull(result);
+            Assert.Equal("MessageInPrivateNote", result.Message);
+            Assert.Equal(psyId, result.UserId);
+            Assert.Equal(DateTime.Now.Day.ToString(), result.CreationDate.Day);
+            Assert.Equal(DateTime.Now.Month.ToString(), result.CreationDate.Month);
+            Assert.Equal(DateTime.Now.Year.ToString(), result.CreationDate.Year);
+            Assert.Equal(DateTime.Now.Minute.ToString(), result.CreationDate.Minute);
+            Assert.Equal(DateTime.Now.Hour.ToString(), result.CreationDate.Hour);
+            #endregion
+        }
+       
+        [Fact]
+        public async Task ReturnUserPrivateNotes()
+        {
+            #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
+            var config = new MapperConfiguration(opts => {});
+            var settings = new DatabaseSettings{
+                ValuesCollectionName = "Test_Values",
+                UsersCollectionName = "Test_Users",
+                CalendarNotesCollectionName = "Test_CalendarNotes",
+                VisitsCollectionName = "Test_Visits",
+                FamiliesCollectionName = "Test_Families",
+                PrivateNotesCollectionName = "Test_PrivateNotes",
+                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
+                DatabaseName = "Test_Razjo"
+            };
+
+            var mapper = config.CreateMapper(); 
+            var apiHelper = new ApiHelper(mapper, settings);
+            #endregion
+
+            #region Test_Method
+            var result = await apiHelper.ReturnUserPrivateNotes(psyId);
+
+            Assert.NotNull(result);
+            #endregion
+        }
+        #endregion
     }
 }
