@@ -276,10 +276,9 @@
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                     <tr>
                       <td>
-                        <p>Witaj!</p>
-                        <p>W tytule wiadomosci przesylamy kod dolaczenia do rodziny. Zostal on przeslany przez psychologa. </br> Nie zwlekaj! Dołącz jak najszybciej!</p>
-                        <br>
-                        <p>Mamy nadzieje, ze bedziesz zadowolony z naszych uslug.</p>
+                        <p style="text-align:center;"><b>Witaj! </b></p>
+                        <p>W tytule wiadomości przesyłamy kod dołączenia do rodziny. Został on przesłany przez psychologa jako zaproszenie do jego rodziny. Możesz dołączyć do rodziny przez wpisanie kodu z tytułu wiadomości w naszej aplikacji.</p>
+                        <p>Mamy nadzieję, że będziesz zadowolony z naszych uslug.</p>
                         <p>Powodzenia! :) </p>
                       </td>
                     </tr>

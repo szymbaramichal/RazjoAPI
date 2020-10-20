@@ -33,32 +33,29 @@ namespace API.Controllers
         {
             var id = _tokenHelper.GetIdByToken(HttpContext.Request.Headers["Authorization"]);
 
-            var isUserInThisFamily = await _apiHelper.DoesUserBelongToFamily(addCalendarNoteDTO.FamilyId, id);
-            
-
-            if(!isUserInThisFamily) return BadRequest(new {
-                errors = "Invalid family id or you do not belong to this family."
-            });
-
             var mappedNote = _mapper.Map<CalendarNote>(addCalendarNoteDTO);
             
             var calendarNote = await _apiHelper.AddCalendarNote(mappedNote, id);
+
+            if(calendarNote == null) return BadRequest(new {
+                errors = "Niepoprawne id rodziny."
+            });
 
             return _mapper.Map<ReturnCalendarNoteDTO>(calendarNote);
         }
 
         ///<summary>
-        ///Get notes from actual month by token
+        ///Get notes from current month by token
         ///</summary>
         [HttpGet("getLastNotes")]
         public async Task<ActionResult<List<ReturnCalendarNoteDTO>>> GetLastCalendarNotes(GetNotesForActualMonthDTO getNotesForActualMonthDTO)
         {
             var id = _tokenHelper.GetIdByToken(HttpContext.Request.Headers["Authorization"]);
 
-            var notes = await _apiHelper.ReturnActualMonthNotes(getNotesForActualMonthDTO.FamilyId, id);
+            var notes = await _apiHelper.ReturnCurrentMonthNotes(getNotesForActualMonthDTO.FamilyId, id);
 
             if(notes == null) return BadRequest(new {
-                errors = "Invalid family id or you do not belong to this family."
+                errors = "Niepoprawne id rodziny."
             });
 
             List<ReturnCalendarNoteDTO> mappedNotes = new List<ReturnCalendarNoteDTO>();
@@ -82,7 +79,7 @@ namespace API.Controllers
             var notes = await _apiHelper.ReturnNotesForMonth(getNotesForMonthDTO.FamilyId, id, getNotesForMonthDTO.Month);
                         
             if(notes == null) return BadRequest(new {
-                errors = "You do not belong to this family."
+                errors = "Niepoprawne id rodziny."
             });
 
             List<ReturnCalendarNoteDTO> mappedNotes = new List<ReturnCalendarNoteDTO>();
@@ -107,7 +104,7 @@ namespace API.Controllers
             var visit = await _apiHelper.AddVisit(visitToAdd, id);
 
             if(visit == null) return BadRequest(new {
-                errors = "Invalid familyId or you do not belong to this family."
+                errors = "Niepoprawne id rodziny lub nie jesteś psychologiem."
             });
 
             var visitToReturn = _mapper.Map<ReturnVisitDTO>(visit);
@@ -126,7 +123,7 @@ namespace API.Controllers
             var visits = await _apiHelper.ReturnCurrentMonthVisits(getNotesForActualMonthDTO.FamilyId, id);
 
             if(visits == null) return BadRequest(new {
-                errors = "Invalid family id or you do not belong to this family."
+                errors = "Niepoprawne id rodziny."
             });
 
             List<ReturnVisitDTO> mappedVisits = new List<ReturnVisitDTO>();
@@ -150,7 +147,7 @@ namespace API.Controllers
             var visits = await _apiHelper.ReturnVisitsForMonth(getNotesForMonthDTO.FamilyId, id, getNotesForMonthDTO.Month);
                         
             if(visits == null) return BadRequest(new {
-                errors = "You do not belong to this family."
+                errors = "Niepoprawne id rodziny."
             });
 
             List<ReturnVisitDTO> mappedVisits = new List<ReturnVisitDTO>();

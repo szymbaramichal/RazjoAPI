@@ -65,9 +65,9 @@ namespace API.Helpers
             var mailMessage = new MailMessage
             {
                 From = new MailAddress("Razjo@razjo.com"),
-                Subject = "Dziękujemy za skorzystanie z naszej aplikacji!",
+                Subject = "Dziękujemy za rejestracje w naszej aplikacji!",
                 Body = File.ReadAllText("./../API/RegistrationMail.txt"),
-                IsBodyHtml = true,
+                IsBodyHtml = true
             };
 
             mailMessage.To.Add(user.Email);
@@ -127,6 +127,8 @@ namespace API.Helpers
         #region CalendarMethods
         public async Task<CalendarNote> AddCalendarNote(CalendarNote calendarNote, string userId)
         {
+            if(!await DoesUserBelongToFamily(calendarNote.FamilyId, userId)) return null;
+
             calendarNote.Date = new Date{
                 Day = DateTime.Now.Day.ToString(),
                 Month = DateTime.Now.Month.ToString(),
@@ -142,7 +144,7 @@ namespace API.Helpers
             
             return calendarNote;
         }
-        public async Task<List<CalendarNote>> ReturnActualMonthNotes(string familyId, string userId)
+        public async Task<List<CalendarNote>> ReturnCurrentMonthNotes(string familyId, string userId)
         {
             var family = await _familes.Find<Family>(x => x.Id == familyId).FirstOrDefaultAsync();
 
@@ -171,40 +173,30 @@ namespace API.Helpers
        
         public async Task<Visit> AddVisit(Visit visit, string userId)
         {
-            var family = await ReturnFamilyInfo(visit.FamilyId, userId);
-            if(family == null)
-            {
-                return null;
-            }
-            
+            if(!await DoesUserBelongToFamily(visit.FamilyId, userId)) return null;
+            if(await ReturnUserRole(userId) != "PSY") return null;
+
             await _visits.InsertOneAsync(visit);
 
             return visit;
         }
         public async Task<List<Visit>> ReturnCurrentMonthVisits(string familyId, string userId)
         {
-            var family = await _familes.Find<Family>(x => x.Id == familyId).FirstOrDefaultAsync();
+            if(!await DoesUserBelongToFamily(familyId, userId)) return null;
 
-            if(family.PSYId == userId || family.USRId == userId)
-            {
-                var visits = await _visits.Find<Visit>(x => x.FamilyId == familyId && 
-                x.Date.Month == DateTime.Now.Month.ToString() && 
-                x.Date.Year == DateTime.Now.Year.ToString()).ToListAsync();
-                return visits;
-            }
+            var visits = await _visits.Find<Visit>(x => x.FamilyId == familyId && 
+            x.Date.Month == DateTime.Now.Month.ToString() && 
+            x.Date.Year == DateTime.Now.Year.ToString()).ToListAsync();
+            return visits;
 
-            else return null;
         }
         public async Task<List<Visit>> ReturnVisitsForMonth(string familyId, string userId, string month)
         {
-            var family = await _familes.Find<Family>(x => x.Id == familyId).FirstOrDefaultAsync();
+            if(!await DoesUserBelongToFamily(familyId, userId)) return null;
 
-            if(family.PSYId == userId || family.USRId == userId)
-            {
-                var visits = await _visits.Find<Visit>(x => x.FamilyId == familyId && x.Date.Month == month).ToListAsync();
-                return visits;
-            }
-            else return null;
+
+            var visits = await _visits.Find<Visit>(x => x.FamilyId == familyId && x.Date.Month == month).ToListAsync();
+            return visits;
         }
         #endregion
     
@@ -216,6 +208,8 @@ namespace API.Helpers
             Random random = new Random();
             string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             var invitationCode = new string(Enumerable.Repeat(chars, 8).Select(s => s[random.Next(s.Length)]).ToArray());
+
+            
             Family familyToAdd = new Family{
                 FamilyName = familyName,
                 PSYId = id,
@@ -233,7 +227,7 @@ namespace API.Helpers
         }
         public async Task<Family> JoinToFamily(string invitationCode, string id)
         {
-            if(await ReturnUserRole(id) != "PSY") return null;
+            if(await ReturnUserRole(id) == "PSY") return null;
             
             var family = await _familes.Find<Family>(x => x.InvitationCode == invitationCode).FirstOrDefaultAsync();
 
@@ -241,10 +235,7 @@ namespace API.Helpers
 
             var user = await _users.Find<User>(x => x.Id == id).FirstOrDefaultAsync();
 
-            if(user.Role == "USR")
-            {
-                if(user.FamilyId.Count > 0 || family.USRId != null) return null;
-            }
+            if(user.FamilyId.Count > 0 || family.USRId != null) return null;
 
             family.USRId = id;
 
@@ -275,17 +266,15 @@ namespace API.Helpers
                 familyInfo.UsrId = usr.Id;
             }
 
-            var notes = await ReturnActualMonthNotes(familyId, userId);
+            var notes = await ReturnCurrentMonthNotes(familyId, userId);
             var visits = await ReturnCurrentMonthVisits(familyId, userId);
 
             var psy = await _users.Find<User>(x => x.Id == family.PSYId).FirstOrDefaultAsync();
             
             familyInfo.PsyId = psy.Id;
-            familyInfo.PsychologistNames = psy.FirstName + " " + psy.Surname;
-            
+            familyInfo.PsychologistNames = psy.FirstName + " " + psy.Surname;            
             familyInfo.FamilyId = family.Id;
             familyInfo.FamilyName = family.FamilyName;
-            
             familyInfo.InvitationCode = family.InvitationCode;
             
             foreach (var note in notes)
@@ -320,7 +309,7 @@ namespace API.Helpers
                     From = new MailAddress("Razjo@razjo.com"),
                     Subject = family.FamilyName + " - " + family.InvitationCode,
                     Body = File.ReadAllText("./../API/CodeMail.txt"),
-                    IsBodyHtml = true,
+                    IsBodyHtml = true
                 };
                 
                 mailMessage.To.Add(userMail);
@@ -334,7 +323,11 @@ namespace API.Helpers
         public async Task<bool> DoesUserBelongToFamily(string familyId, string userId)
         {
             var family = await _familes.Find<Family>(x => x.Id == familyId).FirstOrDefaultAsync();
-            if(family.PSYId == userId || family.USRId == userId) return true;
+            if(family != null)
+            {
+                if(family.PSYId == userId || family.USRId == userId) return true;
+                else return false;
+            }
             else return false;
         }
         
@@ -343,7 +336,7 @@ namespace API.Helpers
         #region PrivateNotesMethods
         public async Task<PrivateNote> AddPrivateNote(string message, string userId)
         {
-            PrivateNote noteToAdd = new PrivateNote{
+            PrivateNote note = new PrivateNote{
                 Message = message,
                 UserId = userId,
                 CreationDate = new Date{
@@ -354,9 +347,9 @@ namespace API.Helpers
                     Hour = DateTime.Now.Hour.ToString()
                 }
             };
-            await _privateNotes.InsertOneAsync(noteToAdd);
+            await _privateNotes.InsertOneAsync(note);
 
-            return noteToAdd;
+            return note;
         }
         public async Task<List<PrivateNote>> ReturnUserPrivateNotes(string userId)
         {

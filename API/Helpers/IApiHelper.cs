@@ -18,7 +18,7 @@ namespace API.Helpers
 
         #region CalendarMethods
         Task<CalendarNote> AddCalendarNote(CalendarNote calendarNote, string userId);
-        Task<List<CalendarNote>> ReturnActualMonthNotes(string familyId, string userId);
+        Task<List<CalendarNote>> ReturnCurrentMonthNotes(string familyId, string userId);
         Task<List<CalendarNote>> ReturnNotesForMonth(string familyId, string userId, string month);
 
         Task<Visit> AddVisit(Visit visit, string userId);

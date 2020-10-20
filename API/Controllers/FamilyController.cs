@@ -35,7 +35,7 @@ namespace API.Controllers
             var family = await _apiHelper.CreateFamily(id, createFamilyDTO.FamilyName);
 
             if(family == null) return BadRequest(new {
-                errors = "As normal user you can't create family."
+                errors = "Nie możesz stworzyć rodziny jako normalny użytkownik."
             });
 
             var familyToReturn = await _apiHelper.ReturnFamilyInfo(family.Id, id);
@@ -55,7 +55,7 @@ namespace API.Controllers
             var family = await _apiHelper.JoinToFamily(joinToFamilyDTO.InvitationCode, id);
 
             if(family == null) return BadRequest(new {
-                errors = "Bad invitation code, you are not normal user or you are already in family."
+                errors = "Niepoprawny kod lub jesteś już w rodzinie."
             });
 
             var familyToReturn = await _apiHelper.ReturnFamilyInfo(family.Id, id);
@@ -74,11 +74,11 @@ namespace API.Controllers
             var isMailSend = await _apiHelper.SendMailWithCode(sendMailDTO.Email, sendMailDTO.FamilyId, id);
             
             if(!isMailSend) return BadRequest(new {
-                errors = "Invalid familyId or you are not owner of this family."
+                errors = "Niepoprawne id rodziny lub nie jesteś psychologiem."
             });
 
             return Ok(new {
-                message = "Mail has been sent."
+                message = "Mail został wysłany!"
             });
         }
     }

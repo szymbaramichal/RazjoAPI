@@ -276,10 +276,9 @@
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                     <tr>
                       <td>
-                        <p>Witaj!</p>
-                        <p>Dziekujemy za zaufanie i za skorzystanie z naszej aplikacji!</p>
-                        <br>
-                        <p>Mamy nadzieje, ze bedziesz zadowolony z naszych uslug.</p>
+                        <p style="text-align:center;"><b>Witaj! </b></p>
+                        <p>Dziękujemy za zaufanie i za rejestracje w naszej aplikacji!</p>
+                        <p>Mamy nadzieję, ze bedziesz zadowolony z naszych usług.</p>
                         <p>Powodzenia! :) </p>
                       </td>
                     </tr>

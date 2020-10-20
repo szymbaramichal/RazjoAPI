@@ -24,7 +24,7 @@ namespace API.Controllers
         }
 
         ///<summary>
-        /// Register user on platform,      PSY-psychlogist, USR-user
+        /// Register user on platform, PSY-psychlogist/USR-user
         ///</summary>
         /// <param name="registerUserDTO">Email, Password and Role</param>
         [HttpPost("register")]
@@ -35,10 +35,10 @@ namespace API.Controllers
             var isAdded = await _apiHelper.AddUser(mappedUser, registerUserDTO.Password);
 
             if(isAdded) return Ok(new { 
-                message = "Registered successfully."
+                message = "Pomyślnie zarejestrowano."
             });
             else return BadRequest(new {
-                errors = "User with passed in email already exists."
+                errors = "Użytkownik o podanym adresie email już jest zarejestrowany."
             });
         }
 
@@ -54,13 +54,13 @@ namespace API.Controllers
             if(user == null) 
             {
                 return BadRequest(new {
-                    errors = "Invalid password or email."
+                    errors = "Niepoprawne hasło lub email."
                 });
             }
 
             var userToReturn = new ReturnUserDTO();
-
             userToReturn.Families = new List<ReturnFamilyDTO>();
+            
             for (int i = 0; i < user.FamilyId.Count; i++)
             {
                 userToReturn.Families.Add(await _apiHelper.ReturnFamilyInfo(user.FamilyId[i], user.Id));
