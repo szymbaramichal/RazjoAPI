@@ -85,7 +85,7 @@ namespace API.Controllers
         /// <param name="updateUserInfoDTO">Input object</param>
         [HttpPut("update")]
         [Authorize]
-        public async Task<ActionResult<UserInfoDTO>> UpdateUserInfo(UpdateUserInfoDTO updateUserInfoDTO)
+        public async Task<ActionResult<UserInfoDTO>> UpdateUserInfo([FromBody] UpdateUserInfoDTO updateUserInfoDTO)
         {
             var id = _tokenHelper.GetIdByToken(HttpContext.Request.Headers["Authorization"]);
 

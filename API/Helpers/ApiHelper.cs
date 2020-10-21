@@ -340,7 +340,7 @@ namespace API.Helpers
         #region PrivateNotesMethods
         public async Task<PrivateNote> AddPrivateNote(string message, string userId)
         {
-            if(await _users.Find<User>(x => x.Id == null).FirstOrDefaultAsync() == null) return null;
+            if(await _users.Find<User>(x => x.Id == userId).FirstOrDefaultAsync() == null) return null;
 
             PrivateNote note = new PrivateNote{
                 Message = message,
@@ -363,6 +363,21 @@ namespace API.Helpers
             List<PrivateNote> notes = await _privateNotes.Find<PrivateNote>(x => x.UserId == userId).ToListAsync();    
 
             return notes;        
+        }
+        
+        public async Task<PrivateNote> UpdateNote(string message, string noteId, string userId)
+        {
+            var note = await _privateNotes.Find<PrivateNote>(x => x.Id == noteId).FirstOrDefaultAsync();
+
+            if(note == null) return null;
+
+            if(note.UserId != userId) return null;
+
+            note.Message = message;
+
+            await _privateNotes.FindOneAndReplaceAsync<PrivateNote>(x => x.Id == noteId, note);
+
+            return note;
         }
         #endregion
     }

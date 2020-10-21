@@ -56,5 +56,22 @@ namespace API.Controllers
 
             return notesToReturn;
         }
+
+        ///<summary>
+        /// Update user note.
+        ///</summary>
+        [HttpPut("update")]
+        public async Task<ActionResult<ReturnPrivateNoteDTO>> UpdateNote(UpdateNoteDTO updateNoteDTO)
+        {
+            var id = _tokenHelper.GetIdByToken(HttpContext.Request.Headers["Authorization"]);
+
+            var note = await _apiHelper.UpdateNote(updateNoteDTO.Message, updateNoteDTO.NoteId, id);
+
+            if(note == null) return BadRequest(new {
+                errors = "Niepoprawne id notatki."
+            });
+
+            return _mapper.Map<ReturnPrivateNoteDTO>(note);
+        }
     }
 }
