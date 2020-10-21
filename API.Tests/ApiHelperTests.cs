@@ -14,10 +14,22 @@ namespace API.Tests
     public class ApiHelperTests
     {
         #region variables
+        DatabaseSettings settings = new DatabaseSettings{
+                ResetPasswordsName = "Test_ResetPasswords",
+                UsersCollectionName = "Test_Users",
+                CalendarNotesCollectionName = "Test_CalendarNotes",
+                VisitsCollectionName = "Test_Visits",
+                FamiliesCollectionName = "Test_Families",
+                PrivateNotesCollectionName = "Test_PrivateNotes",
+                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
+                DatabaseName = "Test_Razjo"
+        };
         string psyId = "5f9090d2c2086bb8832fa606";
         string usrId = "5f9090e9504e6df0ac825923";
         string familyId = "5f909153535e60df5a2c8d03";
         string familyInvitationCode = "zNmQB06m";
+        string resetPasswordCode = "RyBwgw";
+        string privateNoteId = "5f90add9ad754e65ae990092";
         #endregion
 
         #region Tests_With_Correct_Values
@@ -29,16 +41,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -66,16 +68,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -103,16 +95,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -133,16 +115,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -161,16 +133,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -190,16 +152,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -212,6 +164,57 @@ namespace API.Tests
             #endregion
         }
 
+        [Fact]
+        public async Task SendResetPasswordMail()
+        {
+            #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
+            var config = new MapperConfiguration(opts => {});
+
+            var mapper = config.CreateMapper(); 
+            var apiHelper = new ApiHelper(mapper, settings);
+            #endregion
+
+            #region Test_Method
+            var result = await apiHelper.SendResetPasswordMail("test123psy@mail.com");
+
+            Assert.True(result);
+            #endregion
+        }
+
+        [Fact]
+        public async Task ValidateResetPasswordCode()
+        {
+            #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
+            var config = new MapperConfiguration(opts => {});
+
+            var mapper = config.CreateMapper(); 
+            var apiHelper = new ApiHelper(mapper, settings);
+            #endregion
+
+            #region Test_Method
+            var result = await apiHelper.ValidateResetPasswordCode(resetPasswordCode, "test123psy@mail.com");
+
+            Assert.True(result);
+            #endregion
+        }
+
+        [Fact]
+        public async Task SetNewPassword()
+        {
+            #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
+            var config = new MapperConfiguration(opts => {});
+
+            var mapper = config.CreateMapper(); 
+            var apiHelper = new ApiHelper(mapper, settings);
+            #endregion
+
+            #region Test_Method
+            var result = await apiHelper.SetNewPassword(resetPasswordCode, "test123psy@mail.com", "password");
+
+            Assert.True(result);
+            #endregion
+        }
+
         #endregion
 
         #region FamilyTests
@@ -220,16 +223,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -248,17 +241,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
-
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
             #endregion
@@ -276,16 +258,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -304,16 +276,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -331,16 +293,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -361,17 +313,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
-
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
             #endregion
@@ -395,16 +336,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -416,6 +347,25 @@ namespace API.Tests
             Assert.NotNull(result);
             #endregion
         }
+
+        [Fact]
+        public async Task UpdateNote()
+        {
+            #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
+            var config = new MapperConfiguration(opts => {});
+
+            var mapper = config.CreateMapper(); 
+            var apiHelper = new ApiHelper(mapper, settings);
+            #endregion
+
+            #region Test_Method
+            var result = await apiHelper.UpdateNote("new message", privateNoteId, psyId);
+
+            Assert.NotNull(result);
+            #endregion
+        }
+        
+        
         #endregion
     
         #region CalendarTests
@@ -424,16 +374,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -473,16 +413,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -500,16 +430,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -527,16 +447,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -576,16 +486,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -603,16 +503,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -631,6 +521,7 @@ namespace API.Tests
         #endregion
 
         #region Tests_With_Incorrect_Values
+        
         #region UserMethodsTests
         //works, if correct values tests already passed
         [Fact]
@@ -638,16 +529,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -676,17 +557,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
-
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
             #endregion
@@ -713,16 +583,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -743,16 +603,7 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
+
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -770,16 +621,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -797,17 +638,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
-
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
             #endregion
@@ -819,6 +649,56 @@ namespace API.Tests
             #endregion
         }
 
+        [Fact]
+        public async Task SendResetPasswordMail_Invalid()
+        {
+            #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
+            var config = new MapperConfiguration(opts => {});
+
+            var mapper = config.CreateMapper(); 
+            var apiHelper = new ApiHelper(mapper, settings);
+            #endregion
+
+            #region Test_Method
+            var result = await apiHelper.SendResetPasswordMail("xzczxczxczxczczc@mail.com");
+
+            Assert.False(result);
+            #endregion
+        }
+
+        [Fact]
+        public async Task ValidateResetPasswordCode_Invalid()
+        {
+            #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
+            var config = new MapperConfiguration(opts => {});
+
+            var mapper = config.CreateMapper(); 
+            var apiHelper = new ApiHelper(mapper, settings);
+            #endregion
+
+            #region Test_Method
+            var result = await apiHelper.ValidateResetPasswordCode("inValid", "tescxzczxzcxsy@mail.com");
+
+            Assert.False(result);
+            #endregion
+        }
+
+        [Fact]
+        public async Task SetNewPassword_Invalid()
+        {
+            #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
+            var config = new MapperConfiguration(opts => {});
+
+            var mapper = config.CreateMapper(); 
+            var apiHelper = new ApiHelper(mapper, settings);
+            #endregion
+
+            #region Test_Method
+            var result = await apiHelper.SetNewPassword("InvAlid", "test123psy@mail.com", "password");
+
+            Assert.False(result);
+            #endregion
+        }
         #endregion
 
         #region FamilyTests
@@ -827,16 +707,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -854,16 +724,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -881,16 +741,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -908,17 +758,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
-
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
             #endregion
@@ -935,16 +774,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -965,16 +794,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -992,16 +811,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -1014,6 +823,24 @@ namespace API.Tests
             Assert.Equal(emptyList, result);
             #endregion
         }
+        
+        [Fact]
+        public async Task UpdateNote_Invalid()
+        {
+            #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
+            var config = new MapperConfiguration(opts => {});
+
+            var mapper = config.CreateMapper(); 
+            var apiHelper = new ApiHelper(mapper, settings);
+            #endregion
+
+            #region Test_Method
+            var result = await apiHelper.UpdateNote("new message", "1390add9ad754e65ae990092", psyId);
+
+            Assert.Null(result);
+            #endregion
+        }
+        
         #endregion
     
         #region CalendarTests
@@ -1022,16 +849,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -1064,16 +881,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -1091,16 +898,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -1118,17 +915,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
-
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
             #endregion
@@ -1160,16 +946,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
@@ -1187,16 +963,6 @@ namespace API.Tests
         {
             #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
             var config = new MapperConfiguration(opts => {});
-            var settings = new DatabaseSettings{
-                ValuesCollectionName = "Test_Values",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-            };
 
             var mapper = config.CreateMapper(); 
             var apiHelper = new ApiHelper(mapper, settings);
