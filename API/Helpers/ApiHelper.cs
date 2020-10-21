@@ -99,6 +99,7 @@ namespace API.Helpers
         public async Task<string> ReturnUserRole(string id)
         {
             var user = await _users.Find<User>(x => x.Id == id).FirstOrDefaultAsync();
+            if(user == null) return null;
 
             return user.Role;
         }
@@ -107,6 +108,8 @@ namespace API.Helpers
         {
             var user = await _users.Find<User>(x => x.Id == id).FirstOrDefaultAsync();
 
+            if(user == null) return null;
+
             string[] names = {user.FirstName, user.Surname};
             return names;
         }
@@ -114,6 +117,7 @@ namespace API.Helpers
         public async Task<User> UpdateUserInfo(string id, string firstName, string surname)
         {
             var user = await _users.Find<User>(x => x.Id == id).FirstOrDefaultAsync();
+            if(user == null) return null;
         
             user.FirstName = firstName;
             user.Surname = surname;
@@ -336,6 +340,8 @@ namespace API.Helpers
         #region PrivateNotesMethods
         public async Task<PrivateNote> AddPrivateNote(string message, string userId)
         {
+            if(await _users.Find<User>(x => x.Id == null).FirstOrDefaultAsync() == null) return null;
+
             PrivateNote note = new PrivateNote{
                 Message = message,
                 UserId = userId,
@@ -347,6 +353,7 @@ namespace API.Helpers
                     Hour = DateTime.Now.Hour.ToString()
                 }
             };
+
             await _privateNotes.InsertOneAsync(note);
 
             return note;
