@@ -23,6 +23,7 @@ namespace API.Helpers
         private IMongoCollection<Family> _familes;
         private IMongoCollection<PrivateNote> _privateNotes;
         private IMongoCollection<Visit> _visits;
+        private IMongoCollection<ResetPassword> _resetPasswords;
         private IMongoDatabase database;
 
         #endregion
@@ -39,6 +40,7 @@ namespace API.Helpers
             _familes = database.GetCollection<Family>(settings.FamiliesCollectionName);
             _privateNotes = database.GetCollection<PrivateNote>(settings.PrivateNotesCollectionName);
             _visits = database.GetCollection<Visit>(settings.VisitsCollectionName);
+            _resetPasswords = database.GetCollection<ResetPassword>(settings.ResetPasswordsName);
         }
         #endregion
 
@@ -126,6 +128,74 @@ namespace API.Helpers
 
             return user;
         }
+
+        public async Task<bool> SendResetPasswordMail(string email)
+        {
+            if(await _resetPasswords.Find<ResetPassword>(x => x.Email == email).FirstOrDefaultAsync() != null) return false;
+
+            var user = await _users.Find<User>(x => x.Email == email).FirstOrDefaultAsync();
+            if(user == null) return false;
+
+            Random random = new Random();
+            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            var resetPasswordCode = new string(Enumerable.Repeat(chars, 6).Select(s => s[random.Next(s.Length)]).ToArray());
+
+            var smtpClient = new SmtpClient("smtp.gmail.com")
+            {
+                Port = 587,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential("testrazjo@gmail.com", "TestRazjo2115"),
+                EnableSsl = true
+            };
+
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress("Razjo@razjo.com"),
+                Subject = resetPasswordCode,
+                Body = File.ReadAllText("./../API/ResetPasswordMail.txt"),
+                IsBodyHtml = true
+            };
+                
+            mailMessage.To.Add(email);
+            await smtpClient.SendMailAsync(mailMessage);
+
+            var resetPassword = new ResetPassword{
+                Email = email,
+                ResetCode = resetPasswordCode
+            };
+
+            await _resetPasswords.InsertOneAsync(resetPassword);
+
+            return true;
+        }
+
+        public async Task<bool> SetNewPassword(string resetPasswordCode, string email, string newPassowrd)
+        {
+            var resetPassword = await _resetPasswords.Find<ResetPassword>(x => x.Email == email && x.ResetCode == resetPasswordCode).FirstOrDefaultAsync();
+            if(resetPassword == null) return false;
+
+            var user = await _users.Find<User>(x => x.Email == email).FirstOrDefaultAsync();
+            if(user == null) return false;
+
+            using var hmac = new HMACSHA512();
+
+            user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(newPassowrd));
+            user.PasswordSalt = hmac.Key;
+
+            await _resetPasswords.DeleteOneAsync(x => x.Email == email && x.ResetCode == resetPasswordCode);
+            await _users.FindOneAndReplaceAsync(x => x.Id == user.Id, user);
+
+            return true;
+        }
+
+        public async Task<bool> ValidateResetPasswordCode(string resetPasswordCode, string email)
+        {
+            var resetPassword = await _resetPasswords.Find<ResetPassword>(x => x.Email == email && x.ResetCode == resetPasswordCode).FirstOrDefaultAsync();
+            if(resetPassword == null) return false;
+            
+            return true;
+        }
+
         #endregion
     
         #region CalendarMethods

@@ -14,6 +14,9 @@ namespace API.Helpers
         Task<string> ReturnUserRole(string id);
         Task<string[]> ReturnUserName(string id);
         Task<User> UpdateUserInfo(string id, string firstName, string surname);
+        Task<bool> SendResetPasswordMail(string email);
+        Task<bool> SetNewPassword(string resetPasswordCode, string email, string newPassowrd);
+        Task<bool> ValidateResetPasswordCode(string resetPasswordCode, string email);
         #endregion
 
         #region CalendarMethods
@@ -39,5 +42,6 @@ namespace API.Helpers
         Task<List<PrivateNote>> ReturnUserPrivateNotes(string userId);
         Task<PrivateNote> UpdateNote(string message, string noteId, string userId);
         #endregion
+    
     }
 }

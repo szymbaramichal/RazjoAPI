@@ -10,10 +10,12 @@ namespace API.Helpers
         public string PrivateNotesCollectionName { get; set; }
         public string ConnectionString { get; set; }
         public string DatabaseName { get; set; }
+        public string ResetPasswordsName { get; set; }
     }
 
     public interface IDatabaseSettings
     {
+        string ResetPasswordsName { get; set; }
         string ValuesCollectionName { get; set; }
         string UsersCollectionName { get; set; }
         string VisitsCollectionName { get; set; }

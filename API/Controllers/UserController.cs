@@ -95,5 +95,57 @@ namespace API.Controllers
             
             return mappedUser;
         }
+
+        ///<summary>
+        /// Send mail with code to reset password.
+        ///</summary>
+        [HttpPost("sendResetPasswordMail")]
+        public async Task<IActionResult> SendResetPasswordMail(SendResetPasswordMailDTO sendResetPasswordMailDTO)
+        {
+            var isMailSent = await _apiHelper.SendResetPasswordMail(sendResetPasswordMailDTO.Email);
+
+            if(!isMailSent) return BadRequest(new {
+                errors = "Niepoprawny mail lub już został wysłany mail."
+            });
+
+            return Ok(new {
+                message = "Mail został wysłan.y"
+            });
+        }
+
+        ///<summary>
+        ///Validate code to reset password from mail.
+        ///</summary>
+        [HttpPost("validateRestePasswordCode")]
+        public async Task<IActionResult> ValidateResetPasswordCode(ValidateResetPasswordCodeDTO validateResetPasswordCodeDTO)
+        {
+            var isCodeCorrect = await _apiHelper.ValidateResetPasswordCode(validateResetPasswordCodeDTO.ResetCode, validateResetPasswordCodeDTO.Email);
+
+            if(!isCodeCorrect) return BadRequest(new {
+                errors = "Niepoprawny kod."
+            });
+
+            return Ok(new {
+                message = "Poprawny kod."
+            });
+        }
+
+        ///<summary>
+        ///Set new passowrd for user.
+        ///</summary>
+        [HttpPost("setNewPassword")]
+        public async Task<IActionResult> SetNewPassword(ResetPasswordDTO resetPasswordDTO)
+        {
+            var isPasswordReseted = await _apiHelper.SetNewPassword(resetPasswordDTO.ResetCode, resetPasswordDTO.Email, resetPasswordDTO.Password);
+            
+            if(!isPasswordReseted) return BadRequest(new {
+                errors = "Niepoprawny kod."
+            });
+
+            return Ok(new {
+                message = "Hasło zostało zmienione."
+            });
+        }
+
     }
 }
