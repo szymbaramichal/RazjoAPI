@@ -109,7 +109,7 @@ namespace API.Controllers
             });
 
             return Ok(new {
-                message = "Mail został wysłan.y"
+                message = "Mail został wysłany."
             });
         }
 
