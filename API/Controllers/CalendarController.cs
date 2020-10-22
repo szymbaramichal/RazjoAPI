@@ -47,7 +47,7 @@ namespace API.Controllers
         ///<summary>
         ///Get notes from current month by token
         ///</summary>
-        [HttpGet("getLastNotes")]
+        [HttpPost("getLastNotes")]
         public async Task<ActionResult<List<ReturnCalendarNoteDTO>>> GetLastCalendarNotes(GetNotesForActualMonthDTO getNotesForActualMonthDTO)
         {
             var id = _tokenHelper.GetIdByToken(HttpContext.Request.Headers["Authorization"]);
@@ -71,7 +71,7 @@ namespace API.Controllers
         ///<summary>
         ///Get notes for passed in month.
         ///</summary>
-        [HttpGet("getNotesForMonth")]
+        [HttpPost("getNotesForMonth")]
         public async Task<ActionResult<List<ReturnCalendarNoteDTO>>> GetNotesForPassedMonth(GetNotesForMonthDTO getNotesForMonthDTO)
         {
             var id = _tokenHelper.GetIdByToken(HttpContext.Request.Headers["Authorization"]);
@@ -115,7 +115,7 @@ namespace API.Controllers
         ///<summary>
         ///Get visits for actual month.
         ///</summary>
-        [HttpGet("getLastVisits")]
+        [HttpPost("getLastVisits")]
         public async Task<ActionResult<List<ReturnVisitDTO>>> GetVisitsForCurrentMonth(GetNotesForActualMonthDTO getNotesForActualMonthDTO)
         {
             var id = _tokenHelper.GetIdByToken(HttpContext.Request.Headers["Authorization"]);
@@ -139,7 +139,7 @@ namespace API.Controllers
         ///<summary>
         ///Get visits for passed month.
         ///</summary>
-        [HttpGet("getVisitsForMonth")]
+        [HttpPost("getVisitsForMonth")]
         public async Task<ActionResult<List<ReturnVisitDTO>>> GetVisitsForPassedMonth(GetNotesForMonthDTO getNotesForMonthDTO)
         {
             var id = _tokenHelper.GetIdByToken(HttpContext.Request.Headers["Authorization"]);
