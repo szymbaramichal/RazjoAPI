@@ -26,7 +26,6 @@ namespace API.Controllers
         ///<summary>
         /// Register user on platform, PSY-psychlogist/USR-user
         ///</summary>
-        /// <param name="registerUserDTO">Email, Password and Role</param>
         [HttpPost("register")]
         public async Task<IActionResult> RegisterSingleUser(RegisterUserDTO registerUserDTO)
         {
@@ -45,7 +44,6 @@ namespace API.Controllers
         ///<summary>
         /// Login user in application
         ///</summary>
-        /// <param name="loginUserDTO">Input object</param>
         [HttpPost("login")]
         public async Task<ActionResult<ReturnUserDTO>> Login(LoginUserDTO loginUserDTO)
         {
@@ -82,7 +80,6 @@ namespace API.Controllers
         ///<summary>
         /// Update user Firstname and Surname.
         ///</summary>
-        /// <param name="updateUserInfoDTO">Input object</param>
         [HttpPut("update")]
         [Authorize]
         public async Task<ActionResult<UserInfoDTO>> UpdateUserInfo([FromBody] UpdateUserInfoDTO updateUserInfoDTO)

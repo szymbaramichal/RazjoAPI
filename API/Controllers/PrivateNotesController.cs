@@ -27,7 +27,6 @@ namespace API.Controllers
         ///<summary>
         /// Add private note, only user notes.
         ///</summary>
-        /// <param name="addPrivateNoteDTO">Input object</param>
         [HttpPost("add")]
         public async Task<ActionResult<ReturnPrivateNoteDTO>> AddPrivateNote(AddPrivateNoteDTO addPrivateNoteDTO)
         {

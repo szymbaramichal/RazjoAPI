@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using API.DTOs;
 using API.Helpers;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,11 +13,9 @@ namespace API.Controllers
     {
         private readonly IApiHelper _apiHelper;
         private readonly ITokenHelper _tokenHelper;
-        private readonly IMapper _mapper;
 
-        public FamilyController(IApiHelper apiHelper, ITokenHelper tokenHelper, IMapper mapper)
+        public FamilyController(IApiHelper apiHelper, ITokenHelper tokenHelper)
         {
-            _mapper = mapper;
             _apiHelper = apiHelper;
             _tokenHelper = tokenHelper;
         }
@@ -26,7 +23,6 @@ namespace API.Controllers
         ///<summary>
         /// Create family
         ///</summary>
-        /// <param name="createFamilyDTO">Input object</param>
         [HttpPost("create")]
         public async Task<ActionResult<ReturnFamilyDTO>> CreateFamily(CreateFamilyDTO createFamilyDTO)
         {
@@ -46,7 +42,6 @@ namespace API.Controllers
         ///<summary>
         ///Join to existing family
         ///</summary>
-        /// <param name="joinToFamilyDTO">Input object</param>
         [HttpPost("join")]
         public async Task<ActionResult<ReturnFamilyDTO>> JoinToFamily(JoinToFamilyDTO joinToFamilyDTO)
         {

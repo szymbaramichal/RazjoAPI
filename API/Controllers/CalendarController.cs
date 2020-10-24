@@ -27,7 +27,6 @@ namespace API.Controllers
         ///<summary>
         ///Add note to calendar
         ///</summary>
-        /// <param name="addCalendarNoteDTO">Input object</param>
         [HttpPost("addNote")]
         public async Task<ActionResult<ReturnCalendarNoteDTO>> AddCalendarNote(AddCalendarNoteDTO addCalendarNoteDTO) 
         {

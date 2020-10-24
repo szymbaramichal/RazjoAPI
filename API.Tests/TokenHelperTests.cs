@@ -12,16 +12,6 @@ namespace API.Tests
         #region variables
         string testToken = 
         "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxMjM0NTY3ODkxMjM0NTY3ODkxMjM0NTYiLCJlbWFpbCI6InRlc3RAdGVzdC50ZXN0IiwibmJmIjoxNjAzNTQyMDkwLCJleHAiOjE2NzI2NjU2OTAsImlhdCI6MTYwMzU0MjA5MH0.oFTj2usitqhrHZSuzgoT_9cTz5SYMfrxwbz3M5qpi9uQxSL1h0tQcI1SaHSGPkXgu1mXQC4eDR9-VQI05gqN6A";
-        DatabaseSettings settings = new DatabaseSettings{
-                ResetPasswordsName = "Test_ResetPasswords",
-                UsersCollectionName = "Test_Users",
-                CalendarNotesCollectionName = "Test_CalendarNotes",
-                VisitsCollectionName = "Test_Visits",
-                FamiliesCollectionName = "Test_Families",
-                PrivateNotesCollectionName = "Test_PrivateNotes",
-                ConnectionString = "mongodb+srv://razjo:razjo@testrazjo.eqqzg.mongodb.net/<dbname>?retryWrites=true&w=majority",
-                DatabaseName = "Test_Razjo"
-        };
         #endregion
 
         #region TestMethods
