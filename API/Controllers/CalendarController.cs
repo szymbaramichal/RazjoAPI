@@ -47,12 +47,12 @@ namespace API.Controllers
         ///<summary>
         ///Get notes from current month by token
         ///</summary>
-        [HttpPost("getLastNotes")]
-        public async Task<ActionResult<List<ReturnCalendarNoteDTO>>> GetLastCalendarNotes(GetNotesForActualMonthDTO getNotesForActualMonthDTO)
+        [HttpGet("getLastNotes/{familyId}")]
+        public async Task<ActionResult<List<ReturnCalendarNoteDTO>>> GetLastCalendarNotes(string familyId)
         {
             var id = _tokenHelper.GetIdByToken(HttpContext.Request.Headers["Authorization"]);
 
-            var notes = await _apiHelper.ReturnCurrentMonthNotes(getNotesForActualMonthDTO.FamilyId, id);
+            var notes = await _apiHelper.ReturnCurrentMonthNotes(familyId, id);
 
             if(notes == null) return BadRequest(new {
                 errors = "Niepoprawne id rodziny."
@@ -71,12 +71,12 @@ namespace API.Controllers
         ///<summary>
         ///Get notes for passed in month.
         ///</summary>
-        [HttpPost("getNotesForMonth")]
-        public async Task<ActionResult<List<ReturnCalendarNoteDTO>>> GetNotesForPassedMonth(GetNotesForMonthDTO getNotesForMonthDTO)
+        [HttpGet("getNotesForMonth/{familyId}/{month}")]
+        public async Task<ActionResult<List<ReturnCalendarNoteDTO>>> GetNotesForPassedMonth(string familyId, string month)
         {
             var id = _tokenHelper.GetIdByToken(HttpContext.Request.Headers["Authorization"]);
 
-            var notes = await _apiHelper.ReturnNotesForMonth(getNotesForMonthDTO.FamilyId, id, getNotesForMonthDTO.Month);
+            var notes = await _apiHelper.ReturnNotesForMonth(familyId, id, month);
                         
             if(notes == null) return BadRequest(new {
                 errors = "Niepoprawne id rodziny."
@@ -115,12 +115,12 @@ namespace API.Controllers
         ///<summary>
         ///Get visits for actual month.
         ///</summary>
-        [HttpPost("getLastVisits")]
-        public async Task<ActionResult<List<ReturnVisitDTO>>> GetVisitsForCurrentMonth(GetNotesForActualMonthDTO getNotesForActualMonthDTO)
+        [HttpGet("getLastVisits/{familyId}")]
+        public async Task<ActionResult<List<ReturnVisitDTO>>> GetVisitsForCurrentMonth(string familyId)
         {
             var id = _tokenHelper.GetIdByToken(HttpContext.Request.Headers["Authorization"]);
 
-            var visits = await _apiHelper.ReturnCurrentMonthVisits(getNotesForActualMonthDTO.FamilyId, id);
+            var visits = await _apiHelper.ReturnCurrentMonthVisits(familyId, id);
 
             if(visits == null) return BadRequest(new {
                 errors = "Niepoprawne id rodziny."
@@ -139,12 +139,12 @@ namespace API.Controllers
         ///<summary>
         ///Get visits for passed month.
         ///</summary>
-        [HttpPost("getVisitsForMonth")]
-        public async Task<ActionResult<List<ReturnVisitDTO>>> GetVisitsForPassedMonth(GetNotesForMonthDTO getNotesForMonthDTO)
+        [HttpGet("getVisitsForMonth/{familyId}/{month}")]
+        public async Task<ActionResult<List<ReturnVisitDTO>>> GetVisitsForPassedMonth(string familyId, string month)
         {
             var id = _tokenHelper.GetIdByToken(HttpContext.Request.Headers["Authorization"]);
 
-            var visits = await _apiHelper.ReturnVisitsForMonth(getNotesForMonthDTO.FamilyId, id, getNotesForMonthDTO.Month);
+            var visits = await _apiHelper.ReturnVisitsForMonth(familyId, id, month);
                         
             if(visits == null) return BadRequest(new {
                 errors = "Niepoprawne id rodziny."
