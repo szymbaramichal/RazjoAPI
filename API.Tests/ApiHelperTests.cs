@@ -305,6 +305,23 @@ namespace API.Tests
             #endregion
         }
 
+        [Fact]
+        public async Task DeleteFamily()
+        {
+            #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
+            var config = new MapperConfiguration(opts => {});
+
+            var mapper = config.CreateMapper(); 
+            var apiHelper = new ApiHelper(mapper, settings);
+            #endregion
+
+            #region Test_Method
+            var result = await apiHelper.DeleteFamily(familyId, psyId);
+
+            Assert.True(result);
+            #endregion
+        }
+
         #endregion
 
         #region PrivateNotesMethods
@@ -781,6 +798,23 @@ namespace API.Tests
 
             #region Test_Method
             var result = await apiHelper.DoesUserBelongToFamily(familyId, "1e8e007f3959cc26088ffb86");
+
+            Assert.False(result);
+            #endregion
+        }
+
+        [Fact]
+        public async Task DeleteFamily_Invalid()
+        {
+            #region Create_Mapper_DatabaseSettings_And_Initialization_Of_ApiHelper
+            var config = new MapperConfiguration(opts => {});
+
+            var mapper = config.CreateMapper(); 
+            var apiHelper = new ApiHelper(mapper, settings);
+            #endregion
+
+            #region Test_Method
+            var result = await apiHelper.DeleteFamily(familyId, usrId);
 
             Assert.False(result);
             #endregion
