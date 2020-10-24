@@ -81,5 +81,24 @@ namespace API.Controllers
                 message = "Mail został wysłany!"
             });
         }
+
+        ///<summary>
+        ///Delete family.
+        ///</summary>
+        [HttpDelete("delete/{familyId}")]
+        public async Task<IActionResult> DeleteFamily(string familyId)
+        {
+            var id = _tokenHelper.GetIdByToken(HttpContext.Request.Headers["Authorization"]);
+
+            var isFamilyDeleted = await _apiHelper.DeleteFamily(id, familyId);
+
+            if(!isFamilyDeleted) return BadRequest(new {
+                errors = "Niepoprawne id rodziny lub nie jesteś psychologiem."
+            });
+
+            return Ok(new {
+                message = "Rodzina usunięta."
+            });
+        }
     }
 }

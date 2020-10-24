@@ -35,6 +35,7 @@ namespace API.Helpers
         Task<ReturnFamilyDTO> ReturnFamilyInfo(string familyId, string userId);
         Task<bool> SendMailWithCode(string userMail, string familyId, string performerId);
         Task<bool> DoesUserBelongToFamily(string familyId, string userId);
+        Task<bool> DeleteFamily(string userId, string familyId);
         #endregion
 
         #region PrivateNotesMethods

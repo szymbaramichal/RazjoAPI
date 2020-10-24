@@ -12,6 +12,11 @@ using API.Models;
 using AutoMapper;
 using MongoDB.Driver;
 
+
+//TODO:
+//usuwanie rodziny
+//testy do TokenHelper
+
 namespace API.Helpers
 {
     public class ApiHelper : IApiHelper
@@ -401,6 +406,35 @@ namespace API.Helpers
             {
                 if(family.PSYId == userId || family.USRId == userId) return true;
                 else return false;
+            }
+            else return false;
+        }
+
+        public async Task<bool> DeleteFamily(string userId, string familyId)
+        {
+            if(await ReturnUserRole(userId) == "PSY")
+            {
+                var family = await _familes.Find<Family>(x => x.Id == familyId).FirstOrDefaultAsync();
+                if(family.USRId != userId && family.PSYId != userId) return false;
+            
+                var psy = await _users.Find<User>(x => x.Id == userId).FirstOrDefaultAsync();
+                if(family.USRId != null)
+                {
+                    var usr = await _users.Find<User>(x => x.Id == family.USRId).FirstOrDefaultAsync();
+                    usr.FamilyId.Remove(family.Id);
+                    await _users.FindOneAndReplaceAsync(x => x.Id == usr.Id, usr);
+                }
+
+                psy.FamilyId.Remove(family.Id);
+
+                await _calendarNotes.DeleteManyAsync(x => x.FamilyId == family.Id);
+                await _visits.DeleteManyAsync(x => x.FamilyId == family.Id);
+                
+                await _familes.DeleteOneAsync(x => x.Id == familyId);
+
+                await _users.FindOneAndReplaceAsync(x => x.Id == userId, psy);
+
+                return true;
             }
             else return false;
         }
