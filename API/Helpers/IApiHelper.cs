@@ -42,6 +42,7 @@ namespace API.Helpers
         Task<PrivateNote> AddPrivateNote(string message, string userId);
         Task<List<PrivateNote>> ReturnUserPrivateNotes(string userId);
         Task<PrivateNote> UpdateNote(string message, string noteId, string userId);
+        Task<bool> DeletePrivateNote(string noteId, string userId); 
         #endregion
     
     }

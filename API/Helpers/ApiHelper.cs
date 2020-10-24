@@ -483,6 +483,19 @@ namespace API.Helpers
 
             return note;
         }
+        
+        public async Task<bool> DeletePrivateNote(string noteId, string userId)
+        {
+            var note = await _privateNotes.Find<PrivateNote>(x => x.Id == noteId).FirstOrDefaultAsync();
+            if(note != null)
+            {
+                if(note.UserId != userId) return false;
+                await _privateNotes.DeleteOneAsync(x => x.Id == note.Id);
+                return true;
+            }
+            else return false;
+
+        }
         #endregion
     }
 }

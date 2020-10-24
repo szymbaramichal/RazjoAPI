@@ -72,5 +72,23 @@ namespace API.Controllers
 
             return _mapper.Map<ReturnPrivateNoteDTO>(note);
         }
+
+        ///<summary>
+        /// Delete user's private note.
+        ///</summary>
+        [HttpDelete("delete/{noteId}")]
+        public async Task<IActionResult> DeleteNote(string noteId)
+        {
+            var id = _tokenHelper.GetIdByToken(HttpContext.Request.Headers["Authorization"]);
+
+            var isNoteDeleted = await _apiHelper.DeletePrivateNote(noteId, id);
+
+            if(!isNoteDeleted) return BadRequest(new {
+                errors = "Złe id notatki."
+            });
+            else return Ok(new {
+                message = "Notatka została usunięta."
+            });
+        }
     }
 }
