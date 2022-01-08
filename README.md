@@ -10,10 +10,9 @@
 
 ### Technikalia:
 #### Backend:
- Język: C# w technologii .NET CORE 5 (wersja: 5.0.100-rc.1.20452.10), a dokładniej 
- w technologii ASP.NET CORE 5
+ Język: C# w technologii .NET CORE 5 (wersja: 5.0.100-rc.1.20452.10)
  **Inne technologie wykorzystane**: protokół SMTP, tokeny webowe JWT, SHA512, 
- AutoMapper, DependencyInjection, Swashbuckle - Swagger
+ AutoMapper, DependencyInjection, Swashbuckle - Swagger.
 Baza danych: MongoDB
 
 [========]
