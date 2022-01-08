@@ -1,6 +1,7 @@
 # O Razjo
 
-##### Razjo, czyli aplikacja dostępna na urządzenia mobilne, oraz - póki co w formie aplikacji webowej - na komputery to usprawnienie pracy psychologa, jak i miejsce, w którym osoba korzystająca z niego pomocy znajdzie kilka przydatnych funkcjonalności dla siebie.
+##### Razjo, czyli aplikacja dostępna na urządzenia mobilne, oraz - póki co w formie aplikacji webowej - na komputery to usprawnienie pracy psychologa, jak i miejsce, w którym osoba korzystająca z niego pomocy znajdzie kilka przydatnych funkcjonalności dla siebie. 
+#### Ten projekt jest API aplikacji. 
 
 #### Razjo zakłada istnienie dwóch typów użytkowników:
 * **Psycholog** - może stworzyć „rodzinę” z pacjentem. Może mieć wiele „rodzin”.
@@ -15,7 +16,7 @@
  AutoMapper, DependencyInjection, Swashbuckle - Swagger.
 Baza danych: MongoDB
 
-[========]
+
 
 ### Aplikacja mobilna
 ### **[<< POBIERZ APLIKACJĘ >>](https://www.dropbox.com/s/23rw85sp8ryv8il/Razjo.apk?dl=1 "<< POBIERZ APLIKACJĘ >>")**
