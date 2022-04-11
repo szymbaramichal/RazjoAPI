@@ -1,5 +1,6 @@
 # O Razjo
 
+##### PL:
 ##### Razjo, czyli aplikacja dostępna na urządzenia mobilne, oraz - póki co w formie aplikacji webowej - na komputery to usprawnienie pracy psychologa, jak i miejsce, w którym osoba korzystająca z niego pomocy znajdzie kilka przydatnych funkcjonalności dla siebie. 
 #### Ten projekt jest API aplikacji. 
 
@@ -25,7 +26,7 @@ Baza danych: MongoDB
 
 
 
-
+##### EN:
 ##### Razjo is an application available for mobile devices, and - so far - in the form of a web application for computers. Razjo is an improvement in the work of a psychologist and a application where the person using it will find some useful functionalities for himself.
 #### This project is an API for application.
 
